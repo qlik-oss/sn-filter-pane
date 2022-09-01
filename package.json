@@ -29,7 +29,6 @@
     "test:integration": "aw puppet --testExt '*.int.js' --glob 'test/integration/**/*.int.js'"
   },
   "devDependencies": {
-    "@after-work.js/aw": "^6.0.14",
     "@babel/core": "^7.18.13",
     "@babel/preset-env": "^7.18.10",
     "@babel/preset-react": "^7.18.6",
@@ -50,9 +49,13 @@
     "eslint": "8.23.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-plugin-import": "2.26.0",
-    "eslint-plugin-mocha": "10.1.0"
+    "eslint-plugin-mocha": "10.1.0",
+    "zustand": "^4.1.1"
   },
   "peerDependencies": {
     "@nebula.js/stardust": "^3.0.0-alpha13"
+  },
+  "dependencies": {
+    "extend": "^3.0.2"
   }
 }

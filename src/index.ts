@@ -1,17 +1,27 @@
-import { useElement } from '@nebula.js/stardust';
 import properties from './object-properties';
-import data from './data';
+import getData from './data';
 
 import useRender from './hooks/use-render';
 
-export default function supernova() {
+interface IEnv {
+  flags: {
+    isEnabled: (flag?: string) => boolean;
+  },
+}
+
+export default function supernova(env: IEnv) {
   return {
+    ext: {
+      definition: {},
+      support: {},
+      importProperties: () => {},
+    },
     qae: {
       properties,
-      data,
+      data: getData(),
     },
     component() {
-      useRender();
+      useRender({ ...env });
     },
   };
 }

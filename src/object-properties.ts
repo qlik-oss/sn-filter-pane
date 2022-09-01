@@ -9,17 +9,17 @@ const properties = {
     },
   },
   // -- LISTBOX PROPS --
-  // qListObjectDef: {
-  //   qLibraryId: undefined,
-  //   qFrequencyMode: 'N',
-  //   qDef: {
-  //     cId: '',
-  //     autoSort: true,
-  //     qFieldDefs: [],
-  //     qSortCriterias: [],
+  qListObjectDef: {
+    qLibraryId: undefined,
+    qFrequencyMode: 'N',
+    qDef: {
+      cId: '',
+      autoSort: true,
+      qFieldDefs: [],
+      qSortCriterias: [],
 
-  //   }
-  // }
+    }
+  }
 };
 
 export default properties;
