@@ -35,10 +35,10 @@
     "@babel/preset-env": "^7.18.10",
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
-    "@nebula.js/cli": "3.0.0-alpha13",
-    "@nebula.js/cli-build": "3.0.0-alpha13",
-    "@nebula.js/cli-sense": "3.0.0-alpha13",
-    "@nebula.js/cli-serve": "3.0.0-alpha13",
+    "@nebula.js/cli": "^3.0.0-alpha13",
+    "@nebula.js/cli-build": "^3.0.0-alpha13",
+    "@nebula.js/cli-sense": "^3.0.0-alpha13",
+    "@nebula.js/cli-serve": "^3.0.0-alpha13",
     "@rollup/plugin-typescript": "^8.4.0",
     "@types/enigma.js": "^2.2.2",
     "@types/qlik-engineapi": "^12.67.12",
@@ -56,7 +56,7 @@
     "zustand": "^4.1.1"
   },
   "peerDependencies": {
-    "@nebula.js/stardust": "*"
+    "@nebula.js/stardust": "^3.0.0-alpha13"
   },
   "dependencies": {
     "extend": "^3.0.2"
