@@ -74,7 +74,7 @@ export default function getData() {
             });
 
             // Create child must run after the calling function (i.e. the func calling add) has finished its setProperties call.
-            // filterPaneModel?.createChild(listboxProps, data);
+            filterPaneModel?.createChild(listboxProps, data);
             // filterPaneModel?.getProperties().then((filterPaneProps) => {
             // });
           },
@@ -84,14 +84,14 @@ export default function getData() {
             // setColorVars(data);
             // customTooltipUtils.moveCallbackCustomTooltip(data, dimension);
           },
-          async remove(dimension, data) {
+          remove(dimension, data) {
             const state = store.getState();
 
             // Why is dimension empty here? We need to be able to get the removed dimension's qId and 
             // remove it from the filterpane object by calling model.destroyChild(qId).
 
-            const children = await state.model.getChildInfos();
-            console.log('children', children);
+            state.model?.getChildInfos();
+            // console.log('children', children);
 
             // const qId = dimension.qInfo.qId;
             // const dimToRemove = state.app?.getDimension(qId);
