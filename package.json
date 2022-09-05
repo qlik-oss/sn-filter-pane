@@ -39,6 +39,7 @@
     "@nebula.js/cli-build": "^3.0.0-alpha13",
     "@nebula.js/cli-sense": "^3.0.0-alpha13",
     "@nebula.js/cli-serve": "^3.0.0-alpha13",
+    "@release-it/conventional-changelog": "5.1.0",
     "@rollup/plugin-typescript": "^8.4.0",
     "@types/enigma.js": "^2.2.2",
     "@types/qlik-engineapi": "^12.67.12",
