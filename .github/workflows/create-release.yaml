@@ -36,7 +36,7 @@ jobs:
         run: | 
           [[ "${{ inputs.choice }}" == "No pre release" ]] && \
           npm run release || \
-          npm run release -- --preRelease=${{ inputs.choice }}"
+          npm run release -- --preRelease=${{ inputs.choice }}
 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
