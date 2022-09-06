@@ -1,17 +1,17 @@
 {
-  "name": "sn-filter-pane",
+  "name": "@nebula.js/sn-filter-pane",
   "version": "0.0.0-alpha.1",
-  "description": "Just a Filter pane.",
+  "description": "Filter pane supernova",
   "license": "MIT",
-  "author": {
-    "name": "Johan Lahti",
-    "email": "johan.lahti@qlik.com"
-  },
+  "author": "QlikTech International AB",
   "keywords": [
     "qlik",
     "nebula",
     "stardust"
   ],
+  "publishConfig": {
+    "access": "private"
+  },
   "files": [
     "dist/"
   ],
