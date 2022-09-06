@@ -18,10 +18,10 @@ export default function useRender({ flags }: IRenderArgs ) {
   const app = useApp() as EngineAPI.IApp;
   
   const model = useModel();
-  
-  store.setState({ app, model });
-
   const layout = useLayout() as IFilterPaneLayout;
+  
+  store.setState({ app, model, layout });
+
   const containerElement = <IContainerElement>useElement();
 
   useEffect(() => {
