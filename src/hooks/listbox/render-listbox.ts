@@ -50,6 +50,7 @@ export default function renderListBox({ element, resources, options }: IRenderLi
       stateName: layout.qStateName,
       // @ts-ignore
       __DO_NOT_USE__: {
+        handler: filterPaneHandler,
         focusSearch: true,
         // @ts-ignore
         // sessionModel,
