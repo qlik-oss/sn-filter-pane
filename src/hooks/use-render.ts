@@ -3,6 +3,7 @@ import { store, IStore } from '../store';
 import getListBoxResources from "./listbox/get-listbox-resources";
 import renderListBox from "./listbox/render-listbox";
 import { IContainerElement, IListLayout, IListBoxOptions, IFilterPaneLayout, IListboxResources, ListboxResourcesArr } from './types';
+import './style.scss';
 
 interface IRenderArgs {
   flags: {
@@ -40,8 +41,8 @@ export default function useRender({ flags }: IRenderArgs ) {
     }
     const lbInstances = resourcesArr.map((resources: IListboxResources, index: number) => {
       const element = document.createElement('div');
-      element.id = `listbox-container-${index}`;
-      element.className = 'listbox-container';
+      element.id = `filterpane-container-${index}`;
+      element.className = 'filterpane-container';
       containerElement.appendChild(element);
 
       // Assign an element container for each ListBox and render it within it.

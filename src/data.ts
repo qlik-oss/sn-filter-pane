@@ -1,4 +1,3 @@
-// import create from 'zustand/vanilla';
 import extend from 'extend';
 import { store, IStore } from './store';
 
@@ -25,23 +24,21 @@ const defaultListboxProps = {
     ],
   },
   showTitles: true,
-  // title: "Dim1",
-  subtitle: "",
-  footnote: "",
+  // title: 'Dim1',
+  subtitle: '',
+  footnote: '',
   disableNavMenu: false,
   showDetails: false,
   showDetailsExpression: false,
-  qStateName: "",
+  qStateName: '',
   qInfo: {
-    qType: "listbox"
+    qType: 'listbox'
   },
-  visualization: "listbox",
+  visualization: 'listbox',
   targets: [],
 };
 
 export default function getData() {
-  // const app = useStore((state) => state.app);
-
   return {
     dimensions: {
       min: 1,
@@ -60,7 +57,7 @@ export default function getData() {
     },
     targets: [
       {
-        path: '/qListObjectDef',
+        path: '/qChildListDef/qDef/qListObjectDef',
         dimensions: {
           min: 0,
           max: 10,
@@ -75,7 +72,6 @@ export default function getData() {
               }
             });
 
-            // Create child must run after the calling function (i.e. the func calling add) has finished its setProperties call.
             filterPaneModel?.createChild(listboxProps, data);
             // filterPaneModel?.getProperties().then((filterPaneProps) => {
             // });
@@ -87,7 +83,7 @@ export default function getData() {
           },
           remove(dimension, data, index) {
             const { layout, model: filterPaneModel } = store.getState();
-            const layoutDim = layout.qChildList.qItems[index];
+            const layoutDim = layout.qChildList?.qItems[index];
             if (layoutDim) {
               const qId = layout.qChildList.qItems[index].qInfo.qId;
               filterPaneModel.destroyChild(qId, data);
