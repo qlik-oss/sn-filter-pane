@@ -4,22 +4,25 @@ const properties = {
   subtitle: '',
   footnote: '',
   qChildListDef: {
-    qData: {
-      info: '/qInfo',
-    },
-  },
-  // -- LISTBOX PROPS --
-  qListObjectDef: {
-    qLibraryId: undefined,
-    qFrequencyMode: 'N',
     qDef: {
-      cId: '',
-      autoSort: true,
-      qFieldDefs: [],
-      qSortCriterias: [],
-
+      qListObjectDef: {
+        qLibraryId: undefined,
+        qFrequencyMode: 'N',
+        qDef: {
+          cId: '',
+          autoSort: true,
+          qFieldDefs: [],
+          qSortCriterias: [],
+          qChildListDef: {
+            qData: {
+              info: '/qInfo',
+            },
+          },
+    
+        }
+      }
     }
-  }
+  },
 };
 
 export default properties;
