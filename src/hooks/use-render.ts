@@ -10,12 +10,12 @@ interface IRenderArgs {
   };
 }
 
-interface IUseOption {
+interface IUseOptions {
   toggleExpand?: () => void;
 }
 
 export default function useRender({ flags }: IRenderArgs ) {
-  const options = useOptions() as IUseOption;
+  const options = useOptions() as IUseOptions;
   const { isEnabled } = flags;
 
   const [resourcesArr, setResourcesArr] = useState(undefined);
@@ -61,7 +61,7 @@ export default function useRender({ flags }: IRenderArgs ) {
     });
 
     if (options.toggleExpand) { // TODO: Should only be visible when listboxes does not fit.
-      const button = document.createElement('button');
+      const button = document.createElement('button'); // TODO: Use lui-icon--more
       button.innerHTML = 'expand...';
       button.onclick = options.toggleExpand;
       containerElement.appendChild(button);
