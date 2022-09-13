@@ -18,7 +18,6 @@ const properties = {
               info: '/qInfo',
             },
           },
-    
         }
       }
     }

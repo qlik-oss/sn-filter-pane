@@ -1,4 +1,4 @@
-import pp from './property-definition';
+import pp from './property-panel';
 
 export default function ext(env: object) {
   return {
