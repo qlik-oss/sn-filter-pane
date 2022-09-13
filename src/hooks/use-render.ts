@@ -1,4 +1,4 @@
-import { embed, stardust, useApp, useEffect, useElement, useLayout, useModel, usePromise, useState } from "@nebula.js/stardust";
+import { embed, stardust, useApp, useEffect, useElement, useLayout, useModel, useOptions, usePromise, useState } from "@nebula.js/stardust";
 import { store, IStore } from '../store';
 import getListBoxResources from "./listbox/get-listbox-resources";
 import renderListBox from "./listbox/render-listbox";
@@ -11,8 +11,12 @@ interface IRenderArgs {
   };
 }
 
+interface IUseOptions {
+  toggleExpand?: () => void;
+}
 
 export default function useRender({ flags }: IRenderArgs ) {
+  const options = useOptions() as IUseOptions;
   const { isEnabled } = flags;
 
   const [resourcesArr, setResourcesArr] = useState(undefined);
@@ -34,7 +38,6 @@ export default function useRender({ flags }: IRenderArgs ) {
     });
   }, [app, layout]);
 
-
   useEffect(() => {
     if (!resourcesArr?.length) {
       return;
@@ -43,6 +46,7 @@ export default function useRender({ flags }: IRenderArgs ) {
       const element = document.createElement('div');
       element.id = `filterpane-container-${index}`;
       element.className = 'filterpane-container';
+      element.style.height = '45%';
       containerElement.appendChild(element);
 
       // Assign an element container for each ListBox and render it within it.
@@ -56,6 +60,13 @@ export default function useRender({ flags }: IRenderArgs ) {
         options: {},
       });
     });
+
+    if (options.toggleExpand) { // TODO: Should only be visible when listboxes does not fit.
+      const button = document.createElement('button'); // TODO: Use lui-icon--more
+      button.innerHTML = 'expand...';
+      button.onclick = options.toggleExpand;
+      containerElement.appendChild(button);
+    }
 
     return () => {
       lbInstances.forEach(((destroy) => destroy()));
