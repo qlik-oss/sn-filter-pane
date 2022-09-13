@@ -1,11 +1,11 @@
 
 import { embed, stardust, useApp, useEffect, useElement, useLayout, useModel, useState } from "@nebula.js/stardust";
-import { IContainerElement, IListLayout, IListBoxOptions, IFilterPaneLayout, IListboxResources } from '../types';
+import { IContainerElement, IListLayout, IListBoxOptions, IFilterPaneLayout, IListboxResource } from '../types';
 
 import { getFieldName, postProcessPages } from './funcs';
 
 interface IRenderListBoxOptions {
-  resources: IListboxResources & {
+  resources: IListboxResource & {
     isEnabled: (flag?: string) => boolean;
     app: EngineAPI.IApp
   };

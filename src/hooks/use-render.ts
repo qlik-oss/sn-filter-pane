@@ -2,7 +2,8 @@ import { embed, stardust, useApp, useEffect, useElement, useLayout, useModel, us
 import { store, IStore } from '../store';
 import getListBoxResources from "./listbox/get-listbox-resources";
 import renderListBox from "./listbox/render-listbox";
-import { IContainerElement, IListLayout, IListBoxOptions, IFilterPaneLayout, IListboxResources, ListboxResourcesArr } from './types';
+import { IContainerElement, IListLayout, IListBoxOptions, IFilterPaneLayout, IListboxResource, ListboxResourcesArr } from './types';
+import { render, teardown } from "../components/root";
 
 interface IRenderArgs {
   flags: {
@@ -11,22 +12,23 @@ interface IRenderArgs {
 }
 
 interface IUseOptions {
-  toggleExpand?: () => void;
+  toggleExpand?: () => void; // Callback passed from hosting app. TODO: Set to onClick event on collapsed button
 }
 
 export default function useRender({ flags }: IRenderArgs ) {
   const options = useOptions() as IUseOptions;
   const { isEnabled } = flags;
 
-  const [resourcesArr, setResourcesArr] = useState(undefined);
+  const [resourcesArr, setResourcesArr] = useState<IListboxResource[] | undefined>(undefined);
   const app = useApp() as EngineAPI.IApp;
-  
+
   const model = useModel();
   const layout = useLayout() as IFilterPaneLayout;
-  
+
   store.setState({ app, model, layout });
 
   const containerElement = <IContainerElement>useElement();
+  const listboxOptions: IListBoxOptions = {}
 
   useEffect(() => {
     if (!app || !layout) {
@@ -38,40 +40,51 @@ export default function useRender({ flags }: IRenderArgs ) {
   }, [app, layout]);
 
   useEffect(() => {
-    if (!resourcesArr?.length) {
+    if (!resourcesArr?.length || !app) {
       return;
     }
-    const lbInstances = resourcesArr.map((resources: IListboxResources, index: number) => {
-      const element = document.createElement('div');
-      element.id = `listbox-container-${index}`;
-      element.className = 'listbox-container';
-      element.style.height = '45%';
-      containerElement.appendChild(element);
-
-      // Assign an element container for each ListBox and render it within it.
-      return renderListBox({
-        resources: {
-          ...resources,
-          app,
-          isEnabled,
-        },
-        element,
-        options: {},
-      });
-    });
-
-    if (options.toggleExpand) { // TODO: Should only be visible when listboxes does not fit.
-      const button = document.createElement('button'); // TODO: Use lui-icon--more
-      button.innerHTML = 'expand...';
-      button.onclick = options.toggleExpand;
-      containerElement.appendChild(button);
-    }
-
-    return () => {
-      lbInstances.forEach(((destroy) => destroy()));
-      containerElement.replaceChildren();
-    }
+    const root = render(containerElement, resourcesArr, app, listboxOptions);
+    return (() => {
+      teardown(root);
+    })
   }, [resourcesArr]);
+
+
+  // useEffect(() => {
+  //   if (!resourcesArr?.length) {
+  //     return;
+  //   }
+  //   const lbInstances = resourcesArr.map((resources: IListboxResources, index: number) => {
+  //     const element = document.createElement('div');
+  //     element.id = `listbox-container-${index}`;
+  //     element.className = 'listbox-container';
+  //     element.style.height = '45%';
+  //     containerElement.appendChild(element);
+
+  //     // Assign an element container for each ListBox and render it within it.
+  //     return renderListBox({
+  //       resources: {
+  //         ...resources,
+  //         app,
+  //         isEnabled,
+  //       },
+  //       element,
+  //       options: {},
+  //     });
+  //   });
+
+  //   if (options.toggleExpand) { // TODO: Should only be visible when listboxes does not fit.
+  //     const button = document.createElement('button'); // TODO: Use lui-icon--more
+  //     button.innerHTML = 'expand...';
+  //     button.onclick = options.toggleExpand;
+  //     containerElement.appendChild(button);
+  //   }
+
+  //   return () => {
+  //     lbInstances.forEach(((destroy) => destroy()));
+  //     containerElement.replaceChildren();
+  //   }
+  // }, [resourcesArr]);
 
   // [
   //   // This dependency array should have props that must trigger a re-render
