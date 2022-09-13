@@ -42,11 +42,11 @@ export interface IFilterPaneLayout {
   };
 }
 
-export interface IListboxResources {
+export interface IListboxResource {
   id: string;
   model: GenericObjectModel;
   layout: IListLayout;
   properties: EngineAPI.IGenericObjectProperties;
 }
 
-export type ListboxResourcesArr = array & IListboxResources[];
+export type ListboxResourcesArr = array & IListboxResource[];

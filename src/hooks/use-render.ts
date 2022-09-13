@@ -1,8 +1,8 @@
-import { embed, stardust, useApp, useEffect, useElement, useLayout, useModel, usePromise, useState } from "@nebula.js/stardust";
+import { embed, stardust, useApp, useEffect, useElement, useLayout, useModel, useOptions, usePromise, useState } from "@nebula.js/stardust";
 import { store, IStore } from '../store';
 import getListBoxResources from "./listbox/get-listbox-resources";
-import renderListBox from "./listbox/render-listbox";
-import { IContainerElement, IListLayout, IListBoxOptions, IFilterPaneLayout, IListboxResources, ListboxResourcesArr } from './types';
+import { IContainerElement, IListLayout, IListBoxOptions, IFilterPaneLayout, IListboxResource, ListboxResourcesArr } from './types';
+import { render, teardown } from "../components/root";
 import './style.scss';
 
 interface IRenderArgs {
@@ -11,16 +11,21 @@ interface IRenderArgs {
   };
 }
 
+interface IUseOptions {
+  toggleExpand?: () => void; // Callback passed from hosting app. TODO: Set to onClick event on collapsed button
+  listboxOptions?: IListBoxOptions;
+}
 
 export default function useRender({ flags }: IRenderArgs ) {
+  const options = useOptions() as IUseOptions;
   const { isEnabled } = flags;
 
-  const [resourcesArr, setResourcesArr] = useState(undefined);
+  const [resourcesArr, setResourcesArr] = useState<IListboxResource[] | undefined>(undefined);
   const app = useApp() as EngineAPI.IApp;
-  
+
   const model = useModel();
   const layout = useLayout() as IFilterPaneLayout;
-  
+
   store.setState({ app, model, layout });
 
   const containerElement = <IContainerElement>useElement();
@@ -34,45 +39,13 @@ export default function useRender({ flags }: IRenderArgs ) {
     });
   }, [app, layout]);
 
-
   useEffect(() => {
-    if (!resourcesArr?.length) {
+    if (!resourcesArr?.length || !app) {
       return;
     }
-    const lbInstances = resourcesArr.map((resources: IListboxResources, index: number) => {
-      const element = document.createElement('div');
-      element.id = `filterpane-container-${index}`;
-      element.className = 'filterpane-container';
-      containerElement.appendChild(element);
-
-      // Assign an element container for each ListBox and render it within it.
-      return renderListBox({
-        resources: {
-          ...resources,
-          app,
-          isEnabled,
-        },
-        element,
-        options: {},
-      });
-    });
-
-    return () => {
-      lbInstances.forEach(((destroy) => destroy()));
-      containerElement.replaceChildren();
-    }
+    const root = render(containerElement, resourcesArr, app, options.listboxOptions ?? {});
+    return (() => {
+      teardown(root);
+    })
   }, [resourcesArr]);
-
-  // [
-  //   // This dependency array should have props that must trigger a re-render
-  //   element,
-  //   fieldInstance,
-  //   selectionsApi,
-  //   search,
-  //   // Editing Data > Dimensions - Pane > Re-ordering panes
-  //   layout?.qInfo?.qId,
-  //   // Editing Data > Dimensions - Pane > Field
-  //   getFieldName(layout),
-  // ]);
-
 }
