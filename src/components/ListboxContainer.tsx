@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Box } from "@mui/material";
 import { embed, stardust } from "@nebula.js/stardust";
 import { getFieldName } from "../hooks/listbox/funcs";
 import { IListBoxOptions, IListLayout } from "../hooks/types";
-import mergeListboxOptions from "../hooks/listbox/merge-listbox-options";
 
 interface ListboxContainerProps {
   layout: IListLayout;
@@ -15,11 +14,7 @@ const ListboxContainer = ({ layout, app, listboxOptions }: ListboxContainerProps
 
   const fieldName = getFieldName(layout);
   const [listboxInstance, setListboxInstance] = useState<stardust.FieldInstance>();
-  const [containerElement, setContainerElement] = useState<HTMLDivElement>();
-
-  const handleRef = useCallback((node: any) => {
-    setContainerElement(node);
-  }, []);
+  const elRef = useRef();
 
   useEffect(() => {
     const nebbie = embed(app, {
@@ -31,17 +26,16 @@ const ListboxContainer = ({ layout, app, listboxOptions }: ListboxContainerProps
   }, []);
 
   useEffect(() => {
-    if (!containerElement || !listboxInstance) {
+    if (!elRef.current || !listboxInstance) {
       return undefined;
     }
 
-    const options = mergeListboxOptions(listboxOptions, fieldName, layout);
-    listboxInstance.mount(containerElement, options);
+    listboxInstance.mount(elRef.current, listboxOptions);
 
     return () => {
       listboxInstance.unmount();
     };
-  }, [containerElement, listboxInstance]);
+  }, [elRef.current, listboxInstance]);
 
   return (
     <Box
@@ -49,7 +43,7 @@ const ListboxContainer = ({ layout, app, listboxOptions }: ListboxContainerProps
       sx={{
         height: 400,
       }}
-      ref={handleRef}
+      ref={elRef}
     />
   );
 };
