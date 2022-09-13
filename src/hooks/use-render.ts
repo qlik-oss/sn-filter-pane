@@ -4,6 +4,7 @@ import getListBoxResources from "./listbox/get-listbox-resources";
 import renderListBox from "./listbox/render-listbox";
 import { IContainerElement, IListLayout, IListBoxOptions, IFilterPaneLayout, IListboxResource, ListboxResourcesArr } from './types';
 import { render, teardown } from "../components/root";
+import './style.scss';
 
 interface IRenderArgs {
   flags: {
@@ -54,37 +55,37 @@ export default function useRender({ flags }: IRenderArgs ) {
   //   if (!resourcesArr?.length) {
   //     return;
   //   }
-  //   const lbInstances = resourcesArr.map((resources: IListboxResources, index: number) => {
-  //     const element = document.createElement('div');
-  //     element.id = `listbox-container-${index}`;
-  //     element.className = 'listbox-container';
-  //     element.style.height = '45%';
-  //     containerElement.appendChild(element);
+  // const lbInstances = resourcesArr.map((resources: IListboxResources, index: number) => {
+  //   const element = document.createElement('div');
+  //   element.id = `filterpane-container-${index}`;
+  //   element.className = 'filterpane-container';
+  //   element.style.height = '45%';
+  //   containerElement.appendChild(element);
 
-  //     // Assign an element container for each ListBox and render it within it.
-  //     return renderListBox({
-  //       resources: {
-  //         ...resources,
-  //         app,
-  //         isEnabled,
-  //       },
-  //       element,
-  //       options: {},
-  //     });
+  //   // Assign an element container for each ListBox and render it within it.
+  //   return renderListBox({
+  //     resources: {
+  //       ...resources,
+  //       app,
+  //       isEnabled,
+  //     },
+  //     element,
+  //     options: {},
   //   });
+  // });
 
-  //   if (options.toggleExpand) { // TODO: Should only be visible when listboxes does not fit.
-  //     const button = document.createElement('button'); // TODO: Use lui-icon--more
-  //     button.innerHTML = 'expand...';
-  //     button.onclick = options.toggleExpand;
-  //     containerElement.appendChild(button);
-  //   }
+  // if (options.toggleExpand) { // TODO: Should only be visible when listboxes does not fit.
+  //   const button = document.createElement('button'); // TODO: Use lui-icon--more
+  //   button.innerHTML = 'expand...';
+  //   button.onclick = options.toggleExpand;
+  //   containerElement.appendChild(button);
+  // }
 
-  //   return () => {
-  //     lbInstances.forEach(((destroy) => destroy()));
-  //     containerElement.replaceChildren();
-  //   }
-  // }, [resourcesArr]);
+  // return () => {
+  //   lbInstances.forEach(((destroy) => destroy()));
+  //   containerElement.replaceChildren();
+  // }
+// }, [resourcesArr]);
 
   // [
   //   // This dependency array should have props that must trigger a re-render
