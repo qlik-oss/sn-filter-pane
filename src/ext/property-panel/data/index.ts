@@ -23,7 +23,7 @@ export default function data(env) {
         type: 'string',
         component: 'library-item',
         libraryItemType: 'dimension',
-        ref: 'qListObjectDef.qLibraryId',
+        ref: 'qLibraryId',
         translation: 'Common.Dimension',
         show(itemData) {
           return itemData.qListObjectDef.qLibraryId;
@@ -69,7 +69,7 @@ export default function data(env) {
         },
         translation: 'properties.frequencyCountMode',
         change(props) {
-          props.qListObjectDef.frequencyEnabled = props.qListObjectDef.qFrequencyMode !== frequencies.FREQUENCY_NONE;
+          // props.qListObjectDef.frequencyEnabled = props.qListObjectDef.qFrequencyMode !== constants.FREQUENCY_NONE;
         },
         options: [
           {

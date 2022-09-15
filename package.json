@@ -13,7 +13,10 @@
     "access": "private"
   },
   "files": [
-    "dist/"
+    "dist/",
+    "sn-filter-pane.qext",
+    "sn-filter-pane.js"
+
   ],
   "engines": {
     "node": ">=8"
