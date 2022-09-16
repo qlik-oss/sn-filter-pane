@@ -3,7 +3,7 @@ import textAlignItems from "./text-align-items";
 
 export default function data(env) {
   const { isEnabled } = env;
-;
+
   const data = {
     classification: {
       section: 'data',

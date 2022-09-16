@@ -1,4 +1,11 @@
 
+const autoSortCriterias = {
+  qSortByState: 1,
+  qSortByAscii: 1,
+  qSortByNumeric: 1,
+  qSortByLoadOrder: 1,
+};
+
 const sorting = {
   type: 'items',
   component: 'filterpane-sorting',

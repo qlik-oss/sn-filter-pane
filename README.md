@@ -17,7 +17,7 @@ cd ./sn-filter-pane
 
 To view the viz using Nebula serve (and watch files for changes) use:
 ```
-yarn start
+npm start
 ```
 Then go to: http://localhost:8000 and select a backend Engine service and an app to connect to.
 

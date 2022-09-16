@@ -1,6 +1,6 @@
 import sorting from "./sorting";
 // import simpleSorting from "./simple-sorting";
-import getSettings from "./settings";
+import settings from "./settings";
 import getData from "./data";
 
 
@@ -12,7 +12,7 @@ export default function pp(env) {
       data: getData(env),
       sorting,
       // simpleSorting,
-      settings: getSettings(env),
+      settings,
     }
   };
   return out;
