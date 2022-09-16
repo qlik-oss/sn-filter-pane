@@ -1,5 +1,6 @@
 import extend from 'extend';
-import { store, IStore } from './store';
+import { store, IStore } from '../store';
+import FilterPaneHandler from './filterpane-handler';
 
 const defaultListboxProps = {
   qListObjectDef: {
@@ -32,11 +33,12 @@ const defaultListboxProps = {
   showDetailsExpression: false,
   qStateName: '',
   qInfo: {
-    qType: 'listbox'
+    qType: 'listbox',
   },
-  visualization: 'listbox',
+  // visualization: 'listbox',
   targets: [],
 };
+
 
 export default function getData() {
   return {
@@ -44,6 +46,7 @@ export default function getData() {
       min: 1,
       max: 1000,
     },
+    measures: { min: 0, max: 0 },
     qListObjectDef: {
       qShowAlternatives: true,
       qInitialDataFetch: [
@@ -58,13 +61,15 @@ export default function getData() {
     targets: [
       {
         path: '/qChildListDef/qDef/qListObjectDef',
+        measures: { min: 0, max: 0 },
         dimensions: {
-          min: 0,
-          max: 10,
+          min: 1,
+          max: 1000,
           add(dimension: EngineAPI.INxDimension, data, handler) {
             const { model: filterPaneModel } = store.getState();
 
             const listboxProps = extend(true, {}, defaultListboxProps, {
+              ...dimension,
               title: dimension.qDef?.title || dimension.qDef?.qFieldLabels?.[0] || dimension.qDef?.qFieldDefs?.[0],
               qListObjectDef: {
                 qDef: dimension.qDef,
@@ -93,10 +98,6 @@ export default function getData() {
             console.log('replace dimension');
           },
         },
-        // measures: {
-        //   min: 0,
-        //   max: 0,
-        // },
       },
     ],
   };
