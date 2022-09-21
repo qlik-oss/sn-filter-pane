@@ -23,14 +23,9 @@ const ElementResizeListener = ({ onResize }: ElementResizeListenerProps) => {
   }, []);
 
   useEffect(() => {
-    const obj = objectRef.current;
-    if (obj?.contentDocument?.defaultView) {
-      obj.contentDocument.defaultView.addEventListener('resize', localOnResize);
-    }
+    objectRef.current?.contentDocument?.defaultView?.addEventListener('resize', localOnResize);
     return (() => {
-      if (obj?.contentDocument?.defaultView) {
-        obj.contentDocument.defaultView.removeEventListener('resize', localOnResize);
-      }
+      objectRef.current?.contentDocument?.defaultView?.removeEventListener('resize', localOnResize);
     });
   }, [localOnResize]);
 
