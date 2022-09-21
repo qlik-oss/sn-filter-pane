@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid';
 // @ts-ignore
 import { ResizableBox } from 'react-resizable';
 import debounce from 'lodash/debounce';
-import { getColumnCount, getColumnWidth, getHeight, getWidthForRestOfColumns } from './get-size';
+import { getColumnCount, getColumnWidthPercent, getWidth, getWidthForRestOfColumns } from './get-size';
 import { IListBoxOptions, IListboxResource } from '../../hooks/types';
 import ListboxContainer from '../ListboxContainer';
 import 'react-resizable/css/styles.css';
@@ -24,11 +24,12 @@ export default function ListboxGrid(props: ListboxGridProps) {
   const gridRef = useRef<HTMLDivElement>();
   const [resourcesFirst, setResourcesFirst] = useState<IListboxResource[]>([]);
   const [resourcesRest, setResourcesRest] = useState<IListboxResource[] | undefined>([]);
+  const maxColumns = resources.length;
 
   const handleResize = useCallback(() => {
-    const { newWidth } = getHeight(gridRef.current?.offsetWidth ?? 0, resources.length);
+    const { newWidth } = getWidth(gridRef.current?.offsetWidth ?? 0);
     setWidth(newWidth);
-    const { firstColumn, restOfColumns } = distributeResources(resources, getColumnCount(newWidth));
+    const { firstColumn, restOfColumns } = distributeResources(resources, getColumnCount(newWidth, maxColumns));
     if (firstColumn.length !== resourcesFirst.length) {
       setResourcesFirst(firstColumn);
       setResourcesRest(restOfColumns);
@@ -51,7 +52,7 @@ export default function ListboxGrid(props: ListboxGridProps) {
         <Grid container columns={1 + +!!resourcesRest?.length} ref={gridRef as any} spacing={1} height='100%'>
 
           {/* First column */}
-          <Grid item width={`${getColumnWidth(width)}%`}>
+          <Grid item width={`${getColumnWidthPercent(width, maxColumns)}%`}>
             <Grid container columns={1} height='100%' spacing={1}>
               {resourcesFirst.map((resource: IListboxResource) => (
                 <Grid item key={resource.id} width='100%' xs={1}>
@@ -63,8 +64,8 @@ export default function ListboxGrid(props: ListboxGridProps) {
 
           {/* Rest of columns */}
           {!!resourcesRest?.length
-            && <Grid item width={`${getWidthForRestOfColumns(width)}%`}>
-              <Grid container height='100%' spacing={1} columns={getColumnCount(width) - 1}>
+            && <Grid item width={`${getWidthForRestOfColumns(width, maxColumns)}%`}>
+              <Grid container height='100%' spacing={1} columns={getColumnCount(width, maxColumns) - 1}>
                 {resourcesRest?.map((resource: IListboxResource) => (
                   <Grid item key={resource.id} height='100%' width='100%' xs={1}>
                     <ListboxContainer layout={resource.layout} app={app} listboxOptions={listboxOptions} />
