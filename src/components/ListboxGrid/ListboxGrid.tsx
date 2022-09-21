@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid';
 // @ts-ignore
 import { ResizableBox } from 'react-resizable';
 import debounce from 'lodash/debounce';
-import { getColumnCount, getColumnWidth, getHeight } from './get-size';
+import { getColumnCount, getColumnWidth, getHeight, getWidthForRestOfColumns } from './get-size';
 import { IListBoxOptions, IListboxResource } from '../../hooks/types';
 import ListboxContainer from '../ListboxContainer';
 import 'react-resizable/css/styles.css';
@@ -48,13 +48,13 @@ export default function ListboxGrid(props: ListboxGridProps) {
     <>
       <ResizableBox width={1100} height={1100} minConstraints={[100, 100]} maxConstraints={[1220, 1220]}>
         <ElementResizeListener onResize={dHandleResize} />
-        <Grid container columns={1 + +!!resourcesRest?.length} ref={gridRef as any} spacing={1} height={'100%'}>
+        <Grid container columns={1 + +!!resourcesRest?.length} ref={gridRef as any} spacing={1} height='100%'>
 
           {/* First column */}
           <Grid item width={`${getColumnWidth(width)}%`}>
-            <Grid container columns={1} height={'100%'} spacing={1}>
+            <Grid container columns={1} height='100%' spacing={1}>
               {resourcesFirst.map((resource: IListboxResource) => (
-                <Grid item key={resource.id} width={'100%'} xs={1}>
+                <Grid item key={resource.id} width='100%' xs={1}>
                   <ListboxContainer layout={resource.layout} app={app} listboxOptions={listboxOptions} />
                 </Grid>
               ))}
@@ -63,10 +63,10 @@ export default function ListboxGrid(props: ListboxGridProps) {
 
           {/* Rest of columns */}
           {!!resourcesRest?.length
-            && <Grid item width={`${getColumnWidth(width) * (getColumnCount(width) - 1)}%`}>
-              <Grid container height={'100%'} spacing={1} columns={getColumnCount(width) - 1}>
+            && <Grid item width={`${getWidthForRestOfColumns(width)}%`}>
+              <Grid container height='100%' spacing={1} columns={getColumnCount(width) - 1}>
                 {resourcesRest?.map((resource: IListboxResource) => (
-                  <Grid item key={resource.id} height={'100%'} width={'100%'} xs={1}>
+                  <Grid item key={resource.id} height='100%' width='100%' xs={1}>
                     <ListboxContainer layout={resource.layout} app={app} listboxOptions={listboxOptions} />
                   </Grid>
                 ))}

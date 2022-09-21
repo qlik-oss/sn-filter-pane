@@ -9,3 +9,5 @@ export const getColumnCount = (width: number) => {
 };
 
 export const getColumnWidth = (width: number) => 100 / getColumnCount(width);
+
+export const getWidthForRestOfColumns = (width: number) => getColumnWidth(width) * (getColumnCount(width) - 1);

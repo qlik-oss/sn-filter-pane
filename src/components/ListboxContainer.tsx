@@ -11,23 +11,18 @@ interface ListboxContainerProps {
 }
 
 const ListboxContainer = ({ layout, app, listboxOptions }: ListboxContainerProps) => {
-  const [fieldName, setFieldName] = useState<string | undefined>(undefined);
   const [listboxInstance, setListboxInstance] = useState<stardust.FieldInstance>();
   const elRef = useRef<HTMLElement>();
 
   useEffect(() => {
-    setFieldName(getFieldName(layout));
-  }, [layout?.title || layout?.qListObject?.qDimensionInfo?.qFallbackTitle]);
-
-  useEffect(() => {
-    if (!fieldName) return;
+    const fieldName = getFieldName(layout);
     const nebbie = embed(app, {
       //   context: {
       //     language: translator.language,
       //   },
     });
     nebbie.field(fieldName).then((inst: stardust.FieldInstance) => setListboxInstance(inst));
-  }, [fieldName]);
+  }, []);
 
   useEffect(() => {
     if (!elRef.current || !listboxInstance) {
@@ -37,9 +32,7 @@ const ListboxContainer = ({ layout, app, listboxOptions }: ListboxContainerProps
       elRef.current,
       {
         ...listboxOptions,
-        ...{
-          dense: false,
-        },
+        dense: false,
       },
     );
 
@@ -51,8 +44,8 @@ const ListboxContainer = ({ layout, app, listboxOptions }: ListboxContainerProps
   return (
     <>
       <Box
-        height={'100%'}
-        border={'1px solid lightgrey'}
+        height='100%'
+        border='1px solid lightgrey'
         ref={elRef}
       />
     </>

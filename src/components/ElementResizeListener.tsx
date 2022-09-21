@@ -2,11 +2,11 @@ import React, {
   useCallback, useRef, useEffect, RefObject,
 } from 'react';
 
-interface Props {
+interface ElementResizeListenerProps {
   onResize: (event: Event) => void;
 }
 
-const ElementResizeListener: React.FC<Props> = ({ onResize }) => {
+const ElementResizeListener = ({ onResize }: ElementResizeListenerProps) => {
   const rafRef = useRef(0);
   const objectRef: RefObject<HTMLObjectElement> = useRef(null);
   const onResizeRef = useRef(onResize);
@@ -22,24 +22,22 @@ const ElementResizeListener: React.FC<Props> = ({ onResize }) => {
     });
   }, []);
 
-  const onLoad = useCallback(() => {
+  useEffect(() => {
     const obj = objectRef.current;
-    if (obj && obj.contentDocument && obj.contentDocument.defaultView) {
+    if (obj?.contentDocument?.defaultView) {
       obj.contentDocument.defaultView.addEventListener('resize', localOnResize);
     }
-  }, [localOnResize]);
-
-  useEffect(() => () => {
-    const obj = objectRef.current;
-    if (obj && obj.contentDocument && obj.contentDocument.defaultView) {
-      obj.contentDocument.defaultView.removeEventListener('resize', localOnResize);
-    }
+    return (() => {
+      if (obj?.contentDocument?.defaultView) {
+        obj.contentDocument.defaultView.removeEventListener('resize', localOnResize);
+      }
+    });
   }, [localOnResize]);
 
   return (
     <object
-      onLoad={onLoad}
-      ref={objectRef} tabIndex={-1}
+      ref={objectRef}
+      tabIndex={-1}
       type={'text/html'}
       data={'about:blank'}
       title={''}
