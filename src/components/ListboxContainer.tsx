@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Box } from "@mui/material";
-import { embed, stardust } from "@nebula.js/stardust";
-import { getFieldName } from "../hooks/listbox/funcs";
-import { IListBoxOptions, IListLayout } from "../hooks/types";
+import React, { useEffect, useRef, useState } from 'react';
+import { Box } from '@mui/material';
+import { embed, stardust } from '@nebula.js/stardust';
+import { getFieldName } from '../hooks/listbox/funcs';
+import { IListBoxOptions, IListLayout } from '../hooks/types';
 
 interface ListboxContainerProps {
   layout: IListLayout;
@@ -11,26 +11,30 @@ interface ListboxContainerProps {
 }
 
 const ListboxContainer = ({ layout, app, listboxOptions }: ListboxContainerProps) => {
-
-  const fieldName = getFieldName(layout);
   const [listboxInstance, setListboxInstance] = useState<stardust.FieldInstance>();
-  const elRef = useRef();
+  const elRef = useRef<HTMLElement>();
 
   useEffect(() => {
+    const fieldName = getFieldName(layout);
     const nebbie = embed(app, {
-    //   context: {
-    //     language: translator.language,
-    //   },
+      //   context: {
+      //     language: translator.language,
+      //   },
     });
-    nebbie.field(fieldName).then((inst: any) => setListboxInstance(inst));
+    nebbie.field(fieldName).then((inst: stardust.FieldInstance) => setListboxInstance(inst));
   }, []);
 
   useEffect(() => {
     if (!elRef.current || !listboxInstance) {
       return undefined;
     }
-
-    listboxInstance.mount(elRef.current, listboxOptions);
+    listboxInstance.mount(
+      elRef.current,
+      {
+        ...listboxOptions,
+        dense: false,
+      },
+    );
 
     return () => {
       listboxInstance.unmount();
@@ -38,13 +42,13 @@ const ListboxContainer = ({ layout, app, listboxOptions }: ListboxContainerProps
   }, [elRef.current, listboxInstance]);
 
   return (
-    <Box
-      className="listbox-container"
-      sx={{
-        height: 400,
-      }}
-      ref={elRef}
-    />
+    <>
+      <Box
+        height='100%'
+        border='1px solid lightgrey'
+        ref={elRef}
+      />
+    </>
   );
 };
 
