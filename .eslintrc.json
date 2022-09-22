@@ -28,7 +28,8 @@
     "react-hooks/rules-of-hooks": "warn", // Checks rules of Hooks
     "react-hooks/exhaustive-deps": 0, // Checks effect dependencies
     "import/no-unresolved": 0,
-    "import/extensions": 0
+    "import/extensions": 0,
+    "@typescript-eslint/ban-ts-comment": 0
   },
   "overrides": [
     {
