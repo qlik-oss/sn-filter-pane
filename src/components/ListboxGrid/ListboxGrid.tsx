@@ -10,7 +10,7 @@ import { IListBoxOptions, IListboxResource } from '../../hooks/types';
 import ListboxContainer from '../ListboxContainer';
 import 'react-resizable/css/styles.css';
 import ElementResizeListener from '../ElementResizeListener';
-import { distributeResourcesInFirstCoulumn, distributeResources } from './distribute-resources';
+import { distributeResources, distributeResourcesInFirstCoulumn } from './distribute-resources';
 import { FoldedListbox } from '../FoldedListbox';
 import { ExpandButton } from '../ExpandButton';
 
@@ -34,14 +34,14 @@ export default function ListboxGrid(props: ListboxGridProps) {
     const { newWidth, newHeight } = getWidthHeight(gridRef);
     setWidthHeight({ width: newWidth, height: newHeight });
     const { firstColumn, restOfColumns } = distributeResources(resources, getColumnCount(newWidth, maxColumns));
-    const { expanded, folded, expandButton } = distributeResourcesInFirstCoulumn(firstColumn, newHeight);
+    const { expanded, folded, expandButton } = distributeResourcesInFirstCoulumn(firstColumn, newHeight, resourcesFirstFolded.length + +showExpandButton, resourcesFirstExpanded, resourcesFirstFolded);
     if (folded.length !== resourcesFirstFolded.length || restOfColumns?.length !== resourcesRest?.length) {
       setResourcesFirstExpanded(expanded);
       setResourcesFirstFolded(folded);
       setResourcesRest(restOfColumns);
       setshowExpandButton(expandButton);
     }
-  }, [maxColumns, resources, resourcesRest?.length, resourcesFirstFolded.length]);
+  }, [maxColumns, resources, resourcesRest?.length, resourcesFirstFolded, resourcesFirstExpanded, showExpandButton]);
 
   useEffect(() => {
     if (gridRef.current) {
@@ -49,7 +49,7 @@ export default function ListboxGrid(props: ListboxGridProps) {
     }
   }, []);
 
-  const showFoldedInRestColumns = () => wh.height < 200;
+  const showFoldedInRestColumns = () => wh.height < 170;
   const foldedHeight = () => resourcesFirstFolded.length * 58;
   const dHandleResize = debounce(handleResize, 50); // TODO: Remove debounce when used in a snap grid (like sense-client).
 
