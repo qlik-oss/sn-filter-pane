@@ -18,60 +18,6 @@ const removeOverflowingItems = (height: number, foldedItemHeight: number, count:
   return rescources.slice(0, sliceIndex);
 };
 
-// const foldOverflowingItems = (count: number, i: number, rescources: IListboxResource[]) => {
-//   const sliceIndex = Math.min(count, i);
-//   const foldedItems = rescources.slice(0, sliceIndex);
-//   const expandedItems = rescources.slice(sliceIndex);
-//   return { folded: foldedItems, expanded: expandedItems };
-// };
-// const foldOverflowingItems = (count: number, i: number, rescources: IListboxResource[]) => {
-//   const sliceIndex = Math.min(count, i);
-//   const foldedItems = rescources.slice(0, sliceIndex);
-//   const expandedItems = rescources.slice(sliceIndex);
-//   return { folded: foldedItems, expanded: expandedItems };
-// };
-
-// export const distributeResourcesInFirstCoulumn = (rescources: IListboxResource[], height: number, foldedCount: number) => {
-//   let expanded: IListboxResource[] = [];
-//   let folded: IListboxResource[] = [];
-//   let expandButton = false;
-//   const count = rescources.length;
-//   const foldedItemHeight = 60; // TODO: Get from FoldedListbox component
-//   const foldedItemsHeight = () => foldedItemHeight * foldedCount;
-//   const expandedCount = count - foldedCount;
-//   // const foldHeight = () => (count === 1 ? 200 : 100);
-//   const foldHeight = () => (count === 1 ? 200 : 150 - (count * 10));
-//   const foldHeightFactor = 50;
-//   // const heightLimit = (i: number, low = false) => (((count - i - +low) * foldHeightFactor) + foldHeight()) * count;
-//   const heightLimit = (i: number, low = false) => {
-//     if (low) {
-//       console.log({ fih: foldedItemsHeight() });
-//       return foldedItemsHeight() + (expandedCount * 140) + (count * 5);
-//     }
-//     return foldedItemsHeight() + (expandedCount * 150) + (count * 5);
-//   };
-
-//   for (let i = 0; i < count; i++) {
-//     console.log({ hll: heightLimit(i), hlh: heightLimit(i, true), h: height, i });
-//     if (height > heightLimit(i) && height < heightLimit(i, true)) {
-//       ({ folded, expanded } = foldOverflowingItems(count, i, rescources));
-//       console.log('expanded');
-//       break;
-//     } else if (height < heightLimit(i, true)) {
-//       if (height < foldedItemHeight * count) {
-//         folded = removeOverflowingItems(height, foldedItemHeight, count, rescources);
-//         expandButton = true;
-//       } else {
-//         folded = rescources;
-//         console.log('folded');
-//       }
-//     } else {
-//       expanded = rescources;
-//     }
-//   }
-//   return { expanded, folded, expandButton };
-// };
-
 export const distributeResourcesInFirstCoulumn = (rescources: IListboxResource[], height: number, foldedCount: number, cExpanded: IListboxResource[], cFolded: IListboxResource[]) => {
   let expanded: IListboxResource[] = [...cExpanded];
   let folded: IListboxResource[] = [...cFolded];
@@ -85,7 +31,6 @@ export const distributeResourcesInFirstCoulumn = (rescources: IListboxResource[]
   const padOneFolded = () => (foldedCount === 1 ? 20 : 0);
   const foldLimit = foldedItemsHeight() + (expandedCount * 140) + expandedFactor();
   const expandLimit = foldedItemsHeight() + (expandedCount * 140) + expandedFactor() + hysteresis() + padOneFolded();
-  console.table({ height, foldLimit, expandLimit, fih: foldedItemsHeight(), hys: hysteresis(), ec: (expandedCount * 140) });
 
   if (height < foldLimit) {
     if (height < foldedItemHeight * count) {
