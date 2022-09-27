@@ -10,8 +10,8 @@ export const ExpandButton = ({ s }: FoldedListboxProps) => (
   <>
     <Typography
       variant="h6"
-      border={'1px solid lightgrey'}
-      padding={'8px'}
+      border="1px solid lightgrey"
+      padding="8px"
       sx={{
         backgroundColor: '#F0F0F0',
       }}

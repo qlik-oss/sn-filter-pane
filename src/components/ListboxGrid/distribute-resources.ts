@@ -13,6 +13,7 @@ export const distributeResources = (resources: IListboxResource[], columnCount: 
   return { firstColumn, restOfColumns };
 };
 
+// Remove folded items that don't fit in height
 const removeOverflowingItems = (height: number, foldedItemHeight: number, count: number, rescources: IListboxResource[]) => {
   const sliceIndex = (height / foldedItemHeight) - count - 2;
   return rescources.slice(0, sliceIndex);
@@ -23,7 +24,7 @@ export const distributeResourcesInFirstCoulumn = (rescources: IListboxResource[]
   let folded: IListboxResource[] = [...cFolded];
   let expandButton = false;
   const count = rescources.length;
-  const foldedItemHeight = 60; // TODO: Get from FoldedListbox component
+  const foldedItemHeight = 60;
   const foldedItemsHeight = () => (foldedCount ? (foldedItemHeight * foldedCount) + foldedItemHeight : 0);
   const expandedCount = count - foldedCount;
   const hysteresis = () => (count === 1 ? 30 : 110);
