@@ -1,43 +1,6 @@
 import extend from 'extend';
 import { store, IStore } from '../store';
-import FilterPaneHandler from './filterpane-handler';
-
-const defaultListboxProps = {
-  qListObjectDef: {
-    qDef: {
-      qSortCriterias: [
-        {
-          qSortByState: 1,
-          qSortByAscii: 1,
-          qSortByNumeric: 1,
-          qSortByLoadOrder: 1,
-        },
-      ],
-    },
-    qShowAlternatives: true,
-    qInitialDataFetch: [
-      {
-        qTop: 0,
-        qLeft: 0,
-        qWidth: 0,
-        qHeight: 0,
-      },
-    ],
-  },
-  showTitles: true,
-  // title: 'Dim1',
-  subtitle: '',
-  footnote: '',
-  disableNavMenu: false,
-  showDetails: false,
-  showDetailsExpression: false,
-  qStateName: '',
-  qInfo: {
-    qType: 'listbox',
-  },
-  // visualization: 'listbox',
-  targets: [],
-};
+import { defaultListboxProps } from './listbox-properties';
 
 
 export default function getData() {
@@ -47,17 +10,17 @@ export default function getData() {
       max: 1000,
     },
     measures: { min: 0, max: 0 },
-    qListObjectDef: {
-      qShowAlternatives: true,
-      qInitialDataFetch: [
-        {
-          qLeft: 0,
-          qWidth: 1,
-          qTop: 0,
-          qHeight: 100,
-        },
-      ],
-    },
+    // qListObjectDef: {
+    //   qShowAlternatives: true,
+    //   qInitialDataFetch: [
+    //     {
+    //       qLeft: 0,
+    //       qWidth: 1,
+    //       qTop: 0,
+    //       qHeight: 100,
+    //     },
+    //   ],
+    // },
     targets: [
       {
         path: '/qChildListDef/qDef/qListObjectDef',
