@@ -13,15 +13,17 @@ import ElementResizeListener from '../ElementResizeListener';
 import { distributeResources, distributeResourcesInFirstCoulumn } from './distribute-resources';
 import { FoldedListbox } from '../FoldedListbox';
 import { ExpandButton } from '../ExpandButton';
+import { store } from '../../store';
 
 interface ListboxGridProps {
   app: EngineAPI.IApp;
   listboxOptions: IListBoxOptions;
   resources: IListboxResource[];
+  onFullscreen?: (modelId: string) => void;
 }
 
 export default function ListboxGrid(props: ListboxGridProps) {
-  const { resources, app, listboxOptions } = props;
+  const { resources, app, listboxOptions, onFullscreen } = props;
   const [wh, setWidthHeight] = useState({ width: 0, height: 0 });
   const gridRef = useRef<HTMLDivElement>();
   const [resourcesFirstFolded, setResourcesFirstFolded] = useState<IListboxResource[]>([]);
@@ -49,6 +51,12 @@ export default function ListboxGrid(props: ListboxGridProps) {
     }
   }, []);
 
+  const handleOnFullscreen = () => {
+    const { model } = store.getState();
+    if (model) {
+      onFullscreen?.(model.id);
+    }
+  };
   const showFoldedInRestColumns = () => wh.height < 170;
   const foldedHeight = () => resourcesFirstFolded.length * 58;
   const dHandleResize = debounce(handleResize, 50); // TODO: Remove debounce when used in a snap grid (like sense-client).
@@ -56,7 +64,7 @@ export default function ListboxGrid(props: ListboxGridProps) {
   // TODO: Remove ResizableBox, only for developing purposes
   return (
     <>
-      <ResizableBox width={1100} height={1100} minConstraints={[100, 100]} maxConstraints={[1220, 1820]}>
+      <ResizableBox width={1080} height={1000} minConstraints={[100, 100]} maxConstraints={[1220, 1820]}>
         <ElementResizeListener onResize={dHandleResize} />
         <Grid container columns={1 + +!!resourcesRest?.length} ref={gridRef as any} spacing={1} height='100%'>
 
@@ -66,7 +74,7 @@ export default function ListboxGrid(props: ListboxGridProps) {
             {/* Folded */}
             <Grid container columns={1} spacing={1}>
               {showExpandButton && <Grid item width='100%' xs={1}>
-                <ExpandButton s={'Expand...'} />
+                <ExpandButton onClick={handleOnFullscreen} />
               </Grid>}
               {resourcesFirstFolded.map((resource: IListboxResource) => (
                 <Grid item key={resource.id} width='100%' xs={1}>
