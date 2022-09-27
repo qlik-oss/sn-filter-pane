@@ -1,6 +1,7 @@
-export const getWidth = (refWidth: number) => {
-  const width = refWidth - 4;
-  return { newWidth: width };
+export const getWidthHeight = (ref: React.MutableRefObject<HTMLDivElement | undefined>) => {
+  const width = ref?.current?.offsetWidth ?? 0;
+  const height = ref?.current?.offsetHeight ?? 0;
+  return { newWidth: width, newHeight: height };
 };
 
 export const getColumnCount = (width: number, maxColumns: number) => {
