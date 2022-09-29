@@ -47,6 +47,10 @@ export interface IListboxResource {
   model: GenericObjectModel;
   layout: IListLayout;
   properties: EngineAPI.IGenericObjectProperties;
+  height: string;
+  expand: boolean;
+  cardinal: number;
+  responsiveMode: string;
 }
 
 export type ListboxResourcesArr = array & IListboxResource[];

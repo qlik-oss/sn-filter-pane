@@ -73,6 +73,8 @@
     "@nebula.js/stardust": "^3.0.0-alpha13"
   },
   "dependencies": {
+    "@mui/icons-material": "5.10.6",
+    "@mui/material": "5.10.4",
     "extend": "^3.0.2",
     "lodash": "4.17.21"
   }

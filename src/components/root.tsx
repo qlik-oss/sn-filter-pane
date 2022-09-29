@@ -9,7 +9,7 @@ export function render(element: IContainerElement, resources: IListboxResource[]
   const root = createRoot(element);
   root.render(
     <ThemeProvider theme={theme}>
-      <ListboxGrid resources={resources} app={app} listboxOptions={listboxOptions} />
+      <ListboxGrid resources={resources} app={app} listboxOptions={listboxOptions} onFullscreen={onFullscreen} />
     </ThemeProvider>,
   );
 
