@@ -32,7 +32,7 @@ interface ListboxGridProps {
 // TODO: Remove
 const Resizable = styled(ResizableBox)(() => ({
   position: 'absolute',
-  border: '1px solid red',
+  // border: '1px solid red',
 }));
 
 export default function ListboxGrid(props: ListboxGridProps) {
