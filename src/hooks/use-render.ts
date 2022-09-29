@@ -12,11 +12,11 @@ interface IRenderArgs {
 }
 
 interface IUseOptions {
-  toggleExpand?: () => void; // Callback passed from hosting app. TODO: Set to onClick event on collapsed button
+  onFullscreen?: (modelId: string) => void;
   listboxOptions?: IListBoxOptions;
 }
 
-export default function useRender({ flags }: IRenderArgs ) {
+export default function useRender({ flags }: IRenderArgs) {
   const options = useOptions() as IUseOptions;
   const { isEnabled } = flags;
 
@@ -43,7 +43,7 @@ export default function useRender({ flags }: IRenderArgs ) {
     if (!resourcesArr?.length || !app) {
       return;
     }
-    const root = render(containerElement, resourcesArr, app, options.listboxOptions ?? {});
+    const root = render(containerElement, resourcesArr, app, options.listboxOptions ?? {}, options.onFullscreen);
     return (() => {
       teardown(root);
     })
