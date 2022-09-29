@@ -5,7 +5,7 @@ import { IContainerElement, IListBoxOptions, IListboxResource } from '../hooks/t
 import ListboxGrid from './ListboxGrid/ListboxGrid';
 import theme from '../theme/theme';
 
-export function render(element: IContainerElement, resources: IListboxResource[], app: EngineAPI.IApp, listboxOptions: IListBoxOptions) {
+export function render(element: IContainerElement, resources: IListboxResource[], app: EngineAPI.IApp, listboxOptions: IListBoxOptions, onFullscreen?: (modelId: string) => void) {
   const root = createRoot(element);
   root.render(
     <ThemeProvider theme={theme}>
