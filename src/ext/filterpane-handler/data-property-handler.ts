@@ -1,3 +1,4 @@
+import extend from 'extend';
 // import translator from '@qlik-trial/translator';
 // import NumberFormatUtil from '../../../client/utils/property-logic/number-format-util';
 // import { isEnabled } from '../../../../services/feature-flags';
@@ -81,7 +82,6 @@ class DataPropertyHandler {
 
   canAddDimension() {
     return this.getDimensions().length < this.maxDimensions();
-    //			return this.getDimensions().length < 10000;
   }
 
   minMeasures() {
@@ -326,7 +326,7 @@ class DataPropertyHandler {
   }
 
   getAddDimensionLabel() {
-    return this.addDimensionLabel; // || translator.get('Visualization.Requirements.AddDimension');
+    return 'hey hey'; // this.addDimensionLabel; // || translator.get('Visualization.Requirements.AddDimension');
   }
 }
 

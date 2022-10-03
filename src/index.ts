@@ -15,7 +15,7 @@ export default function supernova(env: IEnv) {
     ext: ext(env),
     qae: {
       properties,
-      data: getData(),
+      data: getData(env),
     },
     component() {
       useRender({ ...env });

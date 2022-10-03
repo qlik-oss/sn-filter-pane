@@ -2,8 +2,9 @@ import extend from 'extend';
 import { store, IStore } from '../store';
 import { defaultListboxProps } from './listbox-properties';
 
+export default function getData(env) {
+  const { translator } = env;
 
-export default function getData() {
   return {
     dimensions: {
       min: 1,
@@ -37,7 +38,7 @@ export default function getData() {
               qListObjectDef: {
                 qDef: dimension.qDef,
                 // cId: `listbox-${uid()}`, // <-- This will be generated automatically in lo-handler in Nebula.js
-              }
+              },
             });
 
             filterPaneModel?.createChild(listboxProps, data);
@@ -53,12 +54,16 @@ export default function getData() {
             const { layout, model: filterPaneModel } = store.getState();
             const layoutDim = layout.qChildList?.qItems[index];
             if (layoutDim) {
-              const qId = layout.qChildList.qItems[index].qInfo.qId;
+              const { qId } = layout.qChildList.qItems[index].qInfo;
               filterPaneModel.destroyChild(qId, data);
             }
           },
           replace(dimension, oldDimension, index, data) {
             console.log('replace dimension');
+          },
+          description(_: unknown, __: unknown, config: Config): string {
+            const translationProperty = config && config.type === 'rows' ? 'Visualizations.Descriptions.Row' : 'Visualizations.Descriptions.Column';
+            return translator.get(translationProperty);
           },
         },
       },
