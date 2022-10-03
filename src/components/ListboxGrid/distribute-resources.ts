@@ -76,13 +76,10 @@ export const calculateColumns = (size: ISize, columns: IColumn[], zoomEnabled: b
     // itemCount = size.dimensionCount - usedCount;
     // } else if (!zoomEnabled) {
     if (!zoomEnabled) {
-      // Zoom not enabled (mashup), items evenly distributed and overflow scrolled
-      // distribute the remaining items evenly
-      itemCount = Math.ceil((size.dimensionCount - usedCount) / (maxColumns - columns.length));
-      // to make sure all items in the columns are visible QB-2993
-      itemCount = Math.max(maxPerColumn, itemCount);
-      // but don't add more items then we have left
-      itemCount = Math.min(size.dimensionCount - usedCount, itemCount);
+      // Don't show the fullscreen "..."-button, listboexes are collapsed and overflow is scrollable instead
+      const initialItemCount = Math.ceil((size.dimensionCount - usedCount) / (maxColumns - columns.length));
+      const maxItemCount = Math.max(maxPerColumn, initialItemCount);
+      itemCount = Math.min(size.dimensionCount - usedCount, maxItemCount);
     }
 
     columns.push({
@@ -90,7 +87,7 @@ export const calculateColumns = (size: ISize, columns: IColumn[], zoomEnabled: b
       itemCount,
     });
 
-    // Last columns and all items wont fit, show the there is more items not rendered cue
+    // Last columns and all items wont fit, show the fullscreen "..."-button to view the items that doesn't fit
     const columnsItemsCount = getColumnItemsCount(columns);
     if (columns.length >= maxColumns && maxPerColumn > 0 && columnsItemsCount < size.dimensionCount) {
       columns[columns.length - 1].showAll = true;
@@ -112,13 +109,8 @@ export const balanceColumns = (size: ISize, columns: IColumn[]) => {
   const expanded = columns.filter((column) => column.expand);
   const collapsed = columns.filter((column) => column.expand === false);
 
-  // If there is room to expand one item in the last column of collapsed items we expand it.
-  // If not we distribute the items as evenly as possible among the columns with collapsed items.
-  if (
-    collapsed.length > 0
-    && !collapsed[collapsed.length - 1].showAll
-    && haveRoomToExpandOne(size, collapsed[collapsed.length - 1])
-  ) {
+  const canExpand = collapsed.length > 0 && !collapsed[collapsed.length - 1].showAll && haveRoomToExpandOne(size, collapsed[collapsed.length - 1]);
+  if (canExpand) {
     collapsed[collapsed.length - 1].expand = true;
   } else {
     collapsedItems = getColumnItemsCount(collapsed);

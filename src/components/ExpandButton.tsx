@@ -16,7 +16,7 @@ export const ExpandButton = ({ onClick }: FoldedListboxProps) => (
       sx={{
         backgroundColor: '#F0F0F0',
         width: '100%',
-        height: `${BUTTON_HEIGHT}px`,
+        height: BUTTON_HEIGHT,
       }}
     >
       <MoreHorizIcon sx={{ color: '#555555' }} />

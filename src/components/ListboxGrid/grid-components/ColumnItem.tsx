@@ -2,7 +2,7 @@ import { Grid } from '@mui/material';
 import React from 'react';
 
 export type ColumnItemProps = {
-  height: string,
+  height: string | number,
   children: React.ReactNode,
 }
 

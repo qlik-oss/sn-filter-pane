@@ -32,7 +32,6 @@ interface ListboxGridProps {
 // TODO: Remove
 const Resizable = styled(ResizableBox)(() => ({
   position: 'absolute',
-  // border: '1px solid red',
 }));
 
 export default function ListboxGrid(props: ListboxGridProps) {
@@ -55,7 +54,7 @@ export default function ListboxGrid(props: ListboxGridProps) {
     const mergedColumnsAndResources = mergeColumnsAndResources(balancedColumns, resourcesWithDefaultValues);
     const expandedAndCollapsedColumns = calculateExpandPriority(mergedColumnsAndResources, size);
     setColumns(expandedAndCollapsedColumns);
-  }, []);
+  }, [resources, zoomEnabled]);
 
   useEffect(() => {
     if (gridRef.current) {
@@ -83,7 +82,7 @@ export default function ListboxGrid(props: ListboxGridProps) {
               <Column>
 
                 {!!column?.items?.length && column.items.map((item: IListboxResource) => (
-                  <ColumnItem key={item.id} height={item.expand ? item.height : `${COLLAPSED_HEIGHT}px`}>
+                  <ColumnItem key={item.id} height={item.expand ? item.height : COLLAPSED_HEIGHT}>
                     {item.expand
                       ? <ListboxContainer layout={item.layout} app={app} listboxOptions={listboxOptions}></ListboxContainer>
                       : <FoldedListbox layout={item.layout}></FoldedListbox>
