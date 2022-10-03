@@ -1,22 +1,23 @@
-import { Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import React from 'react';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 export interface FoldedListboxProps {
-  s?: string;
+  onClick: () => void;
 }
 
 // TODO: Fire toggleExpand callback.
-export const ExpandButton = ({ s }: FoldedListboxProps) => (
+export const ExpandButton = ({ onClick }: FoldedListboxProps) => (
   <>
-    <Typography
-      variant="h6"
-      border="1px solid lightgrey"
-      padding="8px"
+    <Button
+      onClick={() => onClick()}
+      disableRipple
       sx={{
         backgroundColor: '#F0F0F0',
+        width: '100%',
       }}
     >
-      {s}
-    </Typography>
+      <MoreHorizIcon sx={{ color: '#555555' }} />
+    </Button>
   </>
 );
