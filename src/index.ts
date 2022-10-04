@@ -2,6 +2,7 @@ import properties from './object-properties';
 import getData from './data';
 
 import useRender from './hooks/use-render';
+import ext from './ext';
 
 interface IEnv {
   flags: {
@@ -11,14 +12,10 @@ interface IEnv {
 
 export default function supernova(env: IEnv) {
   return {
-    ext: {
-      definition: {},
-      support: {},
-      importProperties: () => {},
-    },
+    ext: ext(env),
     qae: {
       properties,
-      data: getData(),
+      data: getData(env),
     },
     component() {
       useRender({ ...env });
