@@ -18,10 +18,9 @@ const properties = {
               info: '/qInfo',
             },
           },
-    
-        }
-      }
-    }
+        },
+      },
+    },
   },
 };
 

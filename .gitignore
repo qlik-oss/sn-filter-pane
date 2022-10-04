@@ -6,6 +6,7 @@
 .vscode
 .npmrc
 
+sn-filter-pane-ext
 node_modules
 coverage
 dist/
