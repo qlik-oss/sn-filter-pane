@@ -7,7 +7,6 @@ export interface FoldedListboxProps {
   onClick: () => void;
 }
 
-// TODO: Fire toggleExpand callback.
 export const ExpandButton = ({ onClick }: FoldedListboxProps) => (
   <>
     <Button
