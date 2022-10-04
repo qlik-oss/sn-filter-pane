@@ -1,8 +1,7 @@
-import sorting from "./sorting";
+import sorting from './sorting';
 // import simpleSorting from "./simple-sorting";
-import settings from "./settings";
-import getData from "./data";
-
+import settings from './settings';
+import getData from './data';
 
 export default function pp(env) {
   const out = {
@@ -13,7 +12,7 @@ export default function pp(env) {
       sorting,
       // simpleSorting,
       settings,
-    }
+    },
   };
   return out;
 }
