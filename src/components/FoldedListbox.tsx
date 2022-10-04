@@ -12,14 +12,12 @@ export const FoldedListbox = ({ layout }: FoldedListboxProps) => {
   const fieldName = useFieldName(layout);
 
   return (
-    <>
-      <Typography
-        variant="h6"
-        border="1px solid lightgrey"
-        padding="8px"
-      >
-        {fieldName}
-      </Typography>
-    </>
+    <Typography
+      variant="h6"
+      border="1px solid lightgrey"
+      padding="8px"
+    >
+      {fieldName}
+    </Typography>
   );
 };

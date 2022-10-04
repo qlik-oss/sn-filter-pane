@@ -1,19 +1,26 @@
 import React, {
   useCallback, useEffect, useRef, useState,
 } from 'react';
-import Grid from '@mui/material/Grid';
+import { Grid } from '@mui/material';
+import { styled } from '@mui/material/styles';
 // @ts-ignore
 import { ResizableBox } from 'react-resizable';
 import debounce from 'lodash/debounce';
-import { getColumnCount, getColumnWidthPercent, getWidthHeight, getWidthForRestOfColumns } from './get-size';
+import getWidthHeight from './get-size';
 import { IListBoxOptions, IListboxResource } from '../../hooks/types';
 import ListboxContainer from '../ListboxContainer';
 import 'react-resizable/css/styles.css';
 import ElementResizeListener from '../ElementResizeListener';
-import { distributeResources, distributeResourcesInFirstCoulumn } from './distribute-resources';
+import {
+  setDefaultValues, balanceColumns, calculateColumns, calculateExpandPriority, COLLAPSED_HEIGHT, mergeColumnsAndResources,
+} from './distribute-resources';
 import { FoldedListbox } from '../FoldedListbox';
 import { ExpandButton } from '../ExpandButton';
 import { store } from '../../store';
+import { IColumn, ISize } from './interfaces';
+import { ColumnGrid } from './grid-components/ColumnGrid';
+import { Column } from './grid-components/Column';
+import { ColumnItem } from './grid-components/ColumnItem';
 
 interface ListboxGridProps {
   app: EngineAPI.IApp;
@@ -22,28 +29,32 @@ interface ListboxGridProps {
   onFullscreen?: (modelId: string) => void;
 }
 
+// TODO: Remove
+const Resizable = styled(ResizableBox)(() => ({
+  position: 'absolute',
+}));
+
 export default function ListboxGrid(props: ListboxGridProps) {
-  const { resources, app, listboxOptions, onFullscreen } = props;
-  const [wh, setWidthHeight] = useState({ width: 0, height: 0 });
+  const {
+    resources,
+    app,
+    listboxOptions,
+    onFullscreen,
+  } = props;
   const gridRef = useRef<HTMLDivElement>();
-  const [resourcesFirstFolded, setResourcesFirstFolded] = useState<IListboxResource[]>([]);
-  const [resourcesFirstExpanded, setResourcesFirstExpanded] = useState<IListboxResource[]>([]);
-  const [resourcesRest, setResourcesRest] = useState<IListboxResource[] | undefined>([]);
-  const [showExpandButton, setshowExpandButton] = useState<boolean>(false);
-  const maxColumns = resources.length;
+  const zoomEnabled = true; // TODO: Get from sense-client
+  const [columns, setColumns] = useState<IColumn[]>([]);
 
   const handleResize = useCallback(() => {
-    const { newWidth, newHeight } = getWidthHeight(gridRef);
-    setWidthHeight({ width: newWidth, height: newHeight });
-    const { firstColumn, restOfColumns } = distributeResources(resources, getColumnCount(newWidth, maxColumns));
-    const { expanded, folded, expandButton } = distributeResourcesInFirstCoulumn(firstColumn, newHeight, resourcesFirstFolded.length + +showExpandButton, resourcesFirstExpanded, resourcesFirstFolded);
-    if (folded.length !== resourcesFirstFolded.length || restOfColumns?.length !== resourcesRest?.length) {
-      setResourcesFirstExpanded(expanded);
-      setResourcesFirstFolded(folded);
-      setResourcesRest(restOfColumns);
-      setshowExpandButton(expandButton);
-    }
-  }, [maxColumns, resources, resourcesRest?.length, resourcesFirstFolded, resourcesFirstExpanded, showExpandButton]);
+    const { width, height } = getWidthHeight(gridRef);
+    const size: ISize = { width, height, dimensionCount: resources.length };
+    const calculatedColumns = calculateColumns(size, [], zoomEnabled);
+    const balancedColumns = balanceColumns(size, calculatedColumns);
+    const resourcesWithDefaultValues = setDefaultValues(resources);
+    const mergedColumnsAndResources = mergeColumnsAndResources(balancedColumns, resourcesWithDefaultValues);
+    const expandedAndCollapsedColumns = calculateExpandPriority(mergedColumnsAndResources, size);
+    setColumns(expandedAndCollapsedColumns);
+  }, [resources, zoomEnabled]);
 
   useEffect(() => {
     if (gridRef.current) {
@@ -57,60 +68,40 @@ export default function ListboxGrid(props: ListboxGridProps) {
       onFullscreen?.(model.id);
     }
   };
-  const showFoldedInRestColumns = () => wh.height < 170;
-  const foldedHeight = () => resourcesFirstFolded.length * 58;
   const dHandleResize = debounce(handleResize, 50); // TODO: Remove debounce when used in a snap grid (like sense-client).
 
   // TODO: Remove ResizableBox, only for developing purposes
   return (
     <>
-      <ResizableBox width={1080} height={1000} minConstraints={[100, 100]} maxConstraints={[1220, 1820]}>
+      <Resizable width={1080} height={1000} minConstraints={[10, 10]} maxConstraints={[1220, 1820]}>
         <ElementResizeListener onResize={dHandleResize} />
-        <Grid container columns={1 + +!!resourcesRest?.length} ref={gridRef as any} spacing={1} height='100%'>
+        <Grid container columns={columns?.length} ref={gridRef as any} spacing={1} height='100%'>
 
-          {/* First column */}
-          <Grid item width={`${getColumnWidthPercent(wh.width, maxColumns)}%`}>
+          {!!columns?.length && columns?.map((column: IColumn, i: number) => (
+            <ColumnGrid key={i} widthPercent={100 / columns.length}>
+              <Column>
 
-            {/* Folded */}
-            <Grid container columns={1} spacing={1}>
-              {showExpandButton && <Grid item width='100%' xs={1}>
-                <ExpandButton onClick={handleOnFullscreen} />
-              </Grid>}
-              {resourcesFirstFolded.map((resource: IListboxResource) => (
-                <Grid item key={resource.id} width='100%' xs={1}>
-                  <FoldedListbox layout={resource.layout} />
-                </Grid>
-              ))}
-            </Grid>
-
-            {/* Expanded */}
-            <Grid container columns={1} height={`calc(100% - ${foldedHeight()}px)`}>
-              {resourcesFirstExpanded.map((resource: IListboxResource) => (
-                <Grid item key={resource.id} width='100%' xs={1} paddingTop='8px'>
-                  <ListboxContainer layout={resource.layout} app={app} listboxOptions={listboxOptions} />
-                </Grid>
-              ))}
-            </Grid>
-
-          </Grid>
-
-          {/* Rest of columns */}
-          {!!resourcesRest?.length
-            && <Grid item width={`${getWidthForRestOfColumns(wh.width, maxColumns)}%`}>
-              <Grid container height='100%' spacing={1} columns={getColumnCount(wh.width, maxColumns) - 1}>
-                {resourcesRest?.map((resource: IListboxResource) => (
-                  <Grid item key={resource.id} height='100%' width='100%' xs={1}>
-                    {showFoldedInRestColumns()
-                      ? <FoldedListbox layout={resource.layout} />
-                      : <ListboxContainer layout={resource.layout} app={app} listboxOptions={listboxOptions} />
+                {!!column?.items?.length && column.items.map((item: IListboxResource) => (
+                  <ColumnItem key={item.id} height={item.expand ? item.height : COLLAPSED_HEIGHT}>
+                    {item.expand
+                      ? <ListboxContainer layout={item.layout} app={app} listboxOptions={listboxOptions}></ListboxContainer>
+                      : <FoldedListbox layout={item.layout}></FoldedListbox>
                     }
-                  </Grid>
+                  </ColumnItem>
                 ))}
-              </Grid>
-            </Grid>
-          }
+
+                {column.showAll
+                  && <ColumnItem height='100%'>
+                    <ExpandButton onClick={handleOnFullscreen}></ExpandButton>
+                  </ColumnItem>}
+                {/* TODO: When {column.showAll && object.expanded} inform user that not all items are shown. (Get object.expanded from sense-client) */}
+              </Column>
+
+            </ColumnGrid>
+          ))}
+
         </Grid>
-      </ResizableBox>
+      </Resizable>
     </>
   );
 }
