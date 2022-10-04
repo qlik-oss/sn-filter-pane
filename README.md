@@ -55,7 +55,7 @@ Now you can start the Filter pane with `npm start` and get changes from the *loc
 
 ## Create a Qlik Sense extension
 
-Use the `npm run serve` command to build a Qlik Sense extension. Then add the extension to your Qlik Sense installation.
+Use the `npm run serve` command to build a Qlik Sense extension. Then add the extension to your local Qlik Sense installation.
 
 For example:
 ```bash

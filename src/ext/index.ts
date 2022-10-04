@@ -20,6 +20,7 @@ export default function ext(env: object) {
             return translator.get(translationProperty);
           },
         },
+        translator,
       });
     },
     definition: <object>pp(env),

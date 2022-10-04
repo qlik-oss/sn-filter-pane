@@ -1,13 +1,12 @@
 import extend from 'extend';
-// import translator from '@qlik-trial/translator';
-// import NumberFormatUtil from '../../../client/utils/property-logic/number-format-util';
-// import { isEnabled } from '../../../../services/feature-flags';
 
 const notSupportedError = 'Not supported in this object, need to implement in subclass.';
 
 class DataPropertyHandler {
   constructor(opts) {
     opts = opts || {};
+
+    this.translator = opts.translator;
 
     this.dimensionDefinition = opts.dimensionDefinition || { max: 0 };
     this.measureDefinition = opts.measureDefinition || { max: 0 };
@@ -129,7 +128,7 @@ class DataPropertyHandler {
     return null;
   }
 
-  addDimension() {
+  async addDimension() {
     throw notSupportedError;
   }
 
@@ -326,7 +325,8 @@ class DataPropertyHandler {
   }
 
   getAddDimensionLabel() {
-    return 'hey hey'; // this.addDimensionLabel; // || translator.get('Visualization.Requirements.AddDimension');
+    const { translator } = this;
+    return this.addDimensionLabel || translator.get('Visualization.Requirements.AddDimension');
   }
 }
 

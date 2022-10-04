@@ -42,8 +42,6 @@ export default function getData(env) {
             });
 
             filterPaneModel?.createChild(listboxProps, data);
-            // filterPaneModel?.getProperties().then((filterPaneProps) => {
-            // });
           },
           move(dimension, data) {
             // setMoveSort(data);
