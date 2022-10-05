@@ -3,12 +3,7 @@ import getData from './data';
 
 import useRender from './hooks/use-render';
 import ext from './ext';
-
-interface IEnv {
-  flags: {
-    isEnabled: (flag?: string) => boolean;
-  },
-}
+import { IEnv } from './types/types';
 
 export default function supernova(env: IEnv) {
   return {
