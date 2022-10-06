@@ -1,0 +1,20 @@
+html,
+body {
+  height: 95%;
+  width: 95%;
+}
+
+#object {
+  position: relative;
+  display: inline-block;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 4px;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+  height: calc(100% - 1px);
+  width: calc(100% - 1px);
+  /* background-color: red; */
+}
+
+#object:first-child {
+  margin-right: 12px;
+}
