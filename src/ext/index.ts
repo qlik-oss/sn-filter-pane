@@ -2,7 +2,7 @@ import pp from './property-panel';
 
 export default function ext(env: object) {
   return {
-    usePropertyHandler: 'list-object-container-data',
+    usePropertyHandler: 'filterpane-data',
     definition: <object>pp(env),
     support: {
       snapshot: true,
