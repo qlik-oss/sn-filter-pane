@@ -17,7 +17,7 @@ echo "${GREEN} Press Y/y to refresh your current Chrome tab when rebuilding: ${N
 read CHOICE
 if [ "$CHOICE" = 'y' ] || [ "$CHOICE" = 'Y'  ]; then
   echo "Refreshing current Chrome tab on changes"
-  fswatch -o ../dist | xargs -n1 -I {} osascript -e 'tell application "Google Chrome" to tell the active tab of its first window to reload' & pid=$!
+  fswatch -o ./dist | xargs -n1 -I {} osascript -e 'tell application "Google Chrome" to tell the active tab of its first window to reload' & pid=$!
   trap "kill $pid" SIGINT
 else
     echo "'$CHOICE' not 'Y' or 'y'. Just running npm run build:watch"
