@@ -1,23 +1,28 @@
-import { embed, stardust, useApp, useEffect, useElement, useLayout, useModel, useOptions, usePromise, useState } from "@nebula.js/stardust";
+import { embed, stardust, useApp, useEffect, useElement, useLayout, useModel, useOptions, usePromise, useState, useConstraints } from "@nebula.js/stardust";
 import { store, IStore } from '../store';
 import getListBoxResources from "./listbox/get-listbox-resources";
 import { IContainerElement, IListLayout, IListBoxOptions, IFilterPaneLayout, IListboxResource, ListboxResourcesArr } from './types';
 import { render, teardown } from "../components/root";
 import './style.scss';
+import { ListboxGridProps } from '../components/ListboxGrid/ListboxGrid';
 
 interface IRenderArgs {
   flags: {
     isEnabled: (flag?: string) => boolean;
   };
+  sense?: {
+    isSmallDevice: () => boolean,
+  }
 }
 
 interface IUseOptions {
-  onFullscreen?: (modelId: string) => void;
   listboxOptions?: IListBoxOptions;
+  zoomSelf?: () => void;
 }
 
-export default function useRender({ flags }: IRenderArgs) {
+export default function useRender({ flags, sense }: IRenderArgs) {
   const options = useOptions() as IUseOptions;
+  const constraints = useConstraints();
   const { isEnabled } = flags;
 
   const [resourcesArr, setResourcesArr] = useState<IListboxResource[] | undefined>(undefined);
@@ -41,11 +46,20 @@ export default function useRender({ flags }: IRenderArgs) {
 
   useEffect(() => {
     if (!resourcesArr?.length || !app) {
-      return;
+      return undefined;
     }
-    const root = render(containerElement, resourcesArr, app, options.listboxOptions ?? {}, options.onFullscreen);
+    const root = render(
+      containerElement,
+      {
+        app,
+        listboxOptions: options.listboxOptions ?? {},
+        resources: resourcesArr,
+        onFullscreen: options.zoomSelf,
+        constraints,
+      },
+    );
     return (() => {
       teardown(root);
-    })
-  }, [resourcesArr]);
+    });
+  }, [resourcesArr, constraints, sense]);
 }
