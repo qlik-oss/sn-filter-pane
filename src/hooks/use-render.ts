@@ -4,23 +4,14 @@ import getListBoxResources from "./listbox/get-listbox-resources";
 import { IContainerElement, IListLayout, IListBoxOptions, IFilterPaneLayout, IListboxResource, ListboxResourcesArr } from './types';
 import { render, teardown } from "../components/root";
 import './style.scss';
-import { ListboxGridProps } from '../components/ListboxGrid/ListboxGrid';
-
-interface IRenderArgs {
-  flags: {
-    isEnabled: (flag?: string) => boolean;
-  };
-  sense?: {
-    isSmallDevice: () => boolean,
-  }
-}
+import { IEnv } from '../types/types';
 
 interface IUseOptions {
   listboxOptions?: IListBoxOptions;
   zoomSelf?: () => void;
 }
 
-export default function useRender({ flags, sense }: IRenderArgs) {
+export default function useRender({ flags, sense }: IEnv) {
   const options = useOptions() as IUseOptions;
   const constraints = useConstraints();
   const { isEnabled } = flags;
