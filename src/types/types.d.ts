@@ -10,4 +10,5 @@ export interface IEnv {
 export interface IConstraints {
   active?: boolean;
   passive?: boolean;
+  select?: boolean;
 }

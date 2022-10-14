@@ -33,14 +33,16 @@ const ListboxContainer = ({
       return undefined;
     }
 
+    const allowSelect = !constraints?.select && !constraints?.active;
+
     listboxInstance.mount(
       elRef.current,
       {
+        __DO_NOT_USE__: {
+          selectDisabled: () => !allowSelect,
+        },
         ...listboxOptions,
         dense: false,
-        __DO_NOT_USE__: {
-          selectDisabled: () => !constraints?.select || !constraints?.active,
-        },
       },
     );
 
