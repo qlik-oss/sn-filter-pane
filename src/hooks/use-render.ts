@@ -1,8 +1,12 @@
-import { embed, stardust, useApp, useEffect, useElement, useLayout, useModel, useOptions, usePromise, useState, useConstraints } from "@nebula.js/stardust";
-import { store, IStore } from '../store';
-import getListBoxResources from "./listbox/get-listbox-resources";
-import { IContainerElement, IListLayout, IListBoxOptions, IFilterPaneLayout, IListboxResource, ListboxResourcesArr } from './types';
-import { render, teardown } from "../components/root";
+import {
+  useApp, useEffect, useElement, useLayout, useModel, useOptions, useState, useConstraints,
+} from '@nebula.js/stardust';
+import { store } from '../store';
+import getListBoxResources from './listbox/get-listbox-resources';
+import {
+  IContainerElement, IListBoxOptions, IFilterPaneLayout, IListboxResource, ListboxResourcesArr,
+} from './types';
+import { render, teardown } from '../components/root';
 import './style.scss';
 import { IEnv } from '../types/types';
 
@@ -11,10 +15,9 @@ interface IUseOptions {
   zoomSelf?: () => void;
 }
 
-export default function useRender({ flags, sense }: IEnv) {
+export default function useRender({ flags }: IEnv) {
   const options = useOptions() as IUseOptions;
   const constraints = useConstraints();
-  const { isEnabled } = flags;
 
   const [resourcesArr, setResourcesArr] = useState<IListboxResource[] | undefined>(undefined);
   const app = useApp() as EngineAPI.IApp;

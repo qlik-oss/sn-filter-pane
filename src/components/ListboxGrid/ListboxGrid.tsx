@@ -21,13 +21,14 @@ import { ColumnGrid } from './grid-components/ColumnGrid';
 import { Column } from './grid-components/Column';
 import { ColumnItem } from './grid-components/ColumnItem';
 import ConditionalWrapper from './ConditionalWrapper';
+import { IConstraints } from '../../types/types';
 
 export interface ListboxGridProps {
   app: EngineAPI.IApp;
   listboxOptions: IListBoxOptions;
   resources: IListboxResource[];
   onFullscreen?: () => void;
-  constraints?: { active?: boolean, passive?: boolean };
+  constraints?: IConstraints;
 }
 
 // TODO: Remove
@@ -82,7 +83,7 @@ export default function ListboxGrid(props: ListboxGridProps) {
                 {!!column?.items?.length && column.items.map((item: IListboxResource) => (
                   <ColumnItem key={item.id} height={item.expand ? item.height : COLLAPSED_HEIGHT}>
                     {item.expand
-                      ? <ListboxContainer layout={item.layout} app={app} listboxOptions={listboxOptions}></ListboxContainer>
+                      ? <ListboxContainer layout={item.layout} app={app} listboxOptions={listboxOptions} constraints={constraints}></ListboxContainer>
                       : <FoldedListbox layout={item.layout}></FoldedListbox>
                     }
                   </ColumnItem>
