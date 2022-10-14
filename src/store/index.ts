@@ -15,6 +15,5 @@ export interface IStore {
 export const store = createVanilla(() => ({
   app: <EngineAPI.IApp | undefined>undefined,
   model: <EngineAPI.IGenericObject | undefined>undefined,
+  isSmallDevice: <(() => boolean) | undefined>undefined,
 }));
-
-

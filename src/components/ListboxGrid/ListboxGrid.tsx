@@ -1,7 +1,7 @@
 import React, {
   useCallback, useEffect, useRef, useState,
 } from 'react';
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // @ts-ignore
 import { ResizableBox } from 'react-resizable';
@@ -27,7 +27,9 @@ export interface ListboxGridProps {
   listboxOptions: IListBoxOptions;
   resources: IListboxResource[];
   onFullscreen?: () => void;
+  isZoomed?: boolean;
   constraints?: { active?: boolean, passive?: boolean };
+  t?: { get: (translationString: string) => string };
 }
 
 // TODO: Remove
@@ -41,22 +43,24 @@ export default function ListboxGrid(props: ListboxGridProps) {
     app,
     listboxOptions,
     onFullscreen,
+    isZoomed,
     constraints,
+    t,
   } = props;
   const gridRef = useRef<HTMLDivElement>();
-  const zoomEnabled = true; // TODO: Get from sense-client
   const [columns, setColumns] = useState<IColumn[]>([]);
+  const isInSense = typeof (onFullscreen) === 'function';
 
   const handleResize = useCallback(() => {
     const { width, height } = getWidthHeight(gridRef);
     const size: ISize = { width, height, dimensionCount: resources.length };
-    const calculatedColumns = calculateColumns(size, [], zoomEnabled);
+    const calculatedColumns = calculateColumns(size, []);
     const balancedColumns = balanceColumns(size, calculatedColumns);
     const resourcesWithDefaultValues = setDefaultValues(resources);
     const mergedColumnsAndResources = mergeColumnsAndResources(balancedColumns, resourcesWithDefaultValues);
     const expandedAndCollapsedColumns = calculateExpandPriority(mergedColumnsAndResources, size);
     setColumns(expandedAndCollapsedColumns);
-  }, [resources, zoomEnabled]);
+  }, [resources]);
 
   useEffect(() => {
     if (gridRef.current) {
@@ -64,12 +68,12 @@ export default function ListboxGrid(props: ListboxGridProps) {
     }
   }, []);
 
-  const dHandleResize = debounce(handleResize, 50); // TODO: Remove debounce when used in a snap grid (like sense-client).
+  const dHandleResize = debounce(handleResize, isInSense ? 0 : 50);
 
   // TODO: Remove Resizable, only for developing purposes
   return (
     <>
-      <ConditionalWrapper condition={typeof (onFullscreen) !== 'function'}
+      <ConditionalWrapper condition={!isInSense}
         wrapper={(children: JSX.Element[]) => <Resizable width={1080} height={1000} minConstraints={[10, 10]} maxConstraints={[1220, 1820]}>{children}</Resizable>}
       >
         <ElementResizeListener onResize={dHandleResize} />
@@ -88,11 +92,14 @@ export default function ListboxGrid(props: ListboxGridProps) {
                   </ColumnItem>
                 ))}
 
-                {column.showAll
+                {column.showAll && !isZoomed
                   && <ColumnItem height='100%'>
                     <ExpandButton onClick={onFullscreen} disabled={constraints?.active}></ExpandButton>
                   </ColumnItem>}
-                {/* TODO: When {column.showAll && object.expanded} inform user that not all items are shown. (Get object.expanded from sense-client) */}
+                {column.showAll && isZoomed
+                  && <ColumnItem height='100%'>
+                    <Typography>{t?.get('Tooltip.Filterpane.NotAllItemsShow')}</Typography>
+                  </ColumnItem>}
               </Column>
 
             </ColumnGrid>
