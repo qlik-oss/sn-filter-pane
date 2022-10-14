@@ -4,14 +4,16 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { BUTTON_HEIGHT } from './ListboxGrid/distribute-resources';
 
 export interface FoldedListboxProps {
-  onClick: () => void;
+  onClick?: () => void;
+  disabled?: boolean;
 }
 
-export const ExpandButton = ({ onClick }: FoldedListboxProps) => (
+export const ExpandButton = ({ onClick, disabled }: FoldedListboxProps) => (
   <>
     <Button
-      onClick={() => onClick()}
+      onClick={() => onClick?.()}
       disableRipple
+      disabled={disabled}
       sx={{
         backgroundColor: '#F0F0F0',
         width: '100%',

@@ -16,17 +16,18 @@ import {
 } from './distribute-resources';
 import { FoldedListbox } from '../FoldedListbox';
 import { ExpandButton } from '../ExpandButton';
-import { store } from '../../store';
 import { IColumn, ISize } from './interfaces';
 import { ColumnGrid } from './grid-components/ColumnGrid';
 import { Column } from './grid-components/Column';
 import { ColumnItem } from './grid-components/ColumnItem';
+import ConditionalWrapper from './ConditionalWrapper';
 
-interface ListboxGridProps {
+export interface ListboxGridProps {
   app: EngineAPI.IApp;
   listboxOptions: IListBoxOptions;
   resources: IListboxResource[];
-  onFullscreen?: (modelId: string) => void;
+  onFullscreen?: () => void;
+  constraints?: { active?: boolean, passive?: boolean };
 }
 
 // TODO: Remove
@@ -40,6 +41,7 @@ export default function ListboxGrid(props: ListboxGridProps) {
     app,
     listboxOptions,
     onFullscreen,
+    constraints,
   } = props;
   const gridRef = useRef<HTMLDivElement>();
   const zoomEnabled = true; // TODO: Get from sense-client
@@ -62,18 +64,14 @@ export default function ListboxGrid(props: ListboxGridProps) {
     }
   }, []);
 
-  const handleOnFullscreen = () => {
-    const { model } = store.getState();
-    if (model) {
-      onFullscreen?.(model.id);
-    }
-  };
   const dHandleResize = debounce(handleResize, 50); // TODO: Remove debounce when used in a snap grid (like sense-client).
 
-  // TODO: Remove ResizableBox, only for developing purposes
+  // TODO: Remove Resizable, only for developing purposes
   return (
     <>
-      <Resizable width={1080} height={1000} minConstraints={[10, 10]} maxConstraints={[1220, 1820]}>
+      <ConditionalWrapper condition={typeof (onFullscreen) !== 'function'}
+        wrapper={(children: JSX.Element[]) => <Resizable width={1080} height={1000} minConstraints={[10, 10]} maxConstraints={[1220, 1820]}>{children}</Resizable>}
+      >
         <ElementResizeListener onResize={dHandleResize} />
         <Grid container columns={columns?.length} ref={gridRef as any} spacing={1} height='100%'>
 
@@ -92,7 +90,7 @@ export default function ListboxGrid(props: ListboxGridProps) {
 
                 {column.showAll
                   && <ColumnItem height='100%'>
-                    <ExpandButton onClick={handleOnFullscreen}></ExpandButton>
+                    <ExpandButton onClick={onFullscreen} disabled={constraints?.active}></ExpandButton>
                   </ColumnItem>}
                 {/* TODO: When {column.showAll && object.expanded} inform user that not all items are shown. (Get object.expanded from sense-client) */}
               </Column>
@@ -101,7 +99,7 @@ export default function ListboxGrid(props: ListboxGridProps) {
           ))}
 
         </Grid>
-      </Resizable>
+      </ConditionalWrapper>
     </>
   );
 }
