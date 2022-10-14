@@ -46,7 +46,6 @@ export default function ListboxGrid(props: ListboxGridProps) {
   const gridRef = useRef<HTMLDivElement>();
   const zoomEnabled = true; // TODO: Get from sense-client
   const [columns, setColumns] = useState<IColumn[]>([]);
-  const [disableExpandButton, setDisableExpandButton] = useState(false);
 
   const handleResize = useCallback(() => {
     const { width, height } = getWidthHeight(gridRef);
@@ -64,10 +63,6 @@ export default function ListboxGrid(props: ListboxGridProps) {
       handleResize();
     }
   }, []);
-
-  useEffect(() => {
-    setDisableExpandButton(!!constraints?.active);
-  }, [constraints?.active]);
 
   const dHandleResize = debounce(handleResize, 50); // TODO: Remove debounce when used in a snap grid (like sense-client).
 
@@ -95,7 +90,7 @@ export default function ListboxGrid(props: ListboxGridProps) {
 
                 {column.showAll
                   && <ColumnItem height='100%'>
-                    <ExpandButton onClick={onFullscreen} disabled={disableExpandButton}></ExpandButton>
+                    <ExpandButton onClick={onFullscreen} disabled={constraints?.active}></ExpandButton>
                   </ColumnItem>}
                 {/* TODO: When {column.showAll && object.expanded} inform user that not all items are shown. (Get object.expanded from sense-client) */}
               </Column>

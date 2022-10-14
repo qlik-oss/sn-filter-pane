@@ -52,5 +52,5 @@ export default function useRender({ flags, sense }: IEnv) {
     return (() => {
       teardown(root);
     });
-  }, [resourcesArr, constraints, sense]);
+  }, [resourcesArr, constraints]);
 }
