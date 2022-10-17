@@ -1,0 +1,27 @@
+import {
+  useApp, useLayout, useModel, useOptions, useConstraints, useTranslator,
+} from '@nebula.js/stardust';
+import { store } from '../store';
+import { IEnv } from '../types/types';
+import {
+  IFilterPaneLayout, IUseOptions,
+} from './types';
+
+export default function useSetup({ sense }: IEnv) {
+  const options = useOptions() as IUseOptions;
+  const constraints = useConstraints();
+  const translator = useTranslator();
+  const app = useApp() as EngineAPI.IApp;
+  const model = useModel();
+  const fpLayout = useLayout() as IFilterPaneLayout;
+
+  store.setState({
+    app,
+    model,
+    fpLayout,
+    isSmallDevice: sense?.isSmallDevice,
+    options,
+    constraints,
+    translator,
+  });
+}

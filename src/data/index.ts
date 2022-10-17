@@ -49,11 +49,13 @@ export default function getData(env) {
             // customTooltipUtils.moveCallbackCustomTooltip(data, dimension);
           },
           remove(dimension, data, index) {
-            const { layout, model: filterPaneModel } = store.getState();
-            const layoutDim = layout.qChildList?.qItems[index];
+            const { fpLayout, model: filterPaneModel } = store.getState();
+
+            const { qItems = [] } = fpLayout?.qChildList || {};
+            const layoutDim = qItems[index];
             if (layoutDim) {
-              const { qId } = layout.qChildList.qItems[index].qInfo;
-              filterPaneModel.destroyChild(qId, data);
+              const { qId } = qItems[index].qInfo;
+              filterPaneModel?.destroyChild(qId, data);
             }
           },
           replace(dimension, oldDimension, index, data) {
