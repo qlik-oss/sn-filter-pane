@@ -3,14 +3,18 @@ import { Box } from '@mui/material';
 import { embed, stardust } from '@nebula.js/stardust';
 import { getFieldName } from '../hooks/listbox/funcs';
 import { IListBoxOptions, IListLayout } from '../hooks/types';
+import { IConstraints } from '../types/types';
 
 interface ListboxContainerProps {
   layout: IListLayout;
   app: EngineAPI.IApp;
   listboxOptions: IListBoxOptions;
+  constraints?: IConstraints;
 }
 
-const ListboxContainer = ({ layout, app, listboxOptions }: ListboxContainerProps) => {
+const ListboxContainer = ({
+  layout, app, constraints, listboxOptions,
+}: ListboxContainerProps) => {
   const [listboxInstance, setListboxInstance] = useState<stardust.FieldInstance>();
   const elRef = useRef<HTMLElement>();
 
@@ -28,9 +32,15 @@ const ListboxContainer = ({ layout, app, listboxOptions }: ListboxContainerProps
     if (!elRef.current || !listboxInstance) {
       return undefined;
     }
+
+    const allowSelect = !constraints?.select && !constraints?.active;
+
     listboxInstance.mount(
       elRef.current,
       {
+        __DO_NOT_USE__: {
+          selectDisabled: () => !allowSelect,
+        },
         ...listboxOptions,
         dense: false,
       },
@@ -39,7 +49,7 @@ const ListboxContainer = ({ layout, app, listboxOptions }: ListboxContainerProps
     return () => {
       listboxInstance.unmount();
     };
-  }, [elRef.current, listboxInstance]);
+  }, [elRef.current, listboxInstance, constraints]);
 
   return (
     <>

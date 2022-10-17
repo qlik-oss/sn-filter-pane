@@ -1,12 +1,11 @@
 export interface IContainerElement extends HTMLDivElement {
   current: HTMLElement
-};
+}
 
 export interface IListLayout extends EngineAPI.IGenericListLayout {
   title: string;
   qStateName: string;
-};
-
+}
 
 interface ISessionModel {
   [key]: any;
@@ -34,6 +33,9 @@ export interface IListBoxOptions {
   stateName?: string;
   properties?: object;
   update?: () => void;
+  __DO_NOT_USE__?: {
+    selectDisabled?: () => boolean;
+  };
 }
 
 export interface IFilterPaneLayout {

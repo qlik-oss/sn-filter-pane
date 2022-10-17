@@ -6,3 +6,9 @@ export interface IEnv {
     isSmallDevice: () => boolean,
   }
 }
+
+export interface IConstraints {
+  active?: boolean;
+  passive?: boolean;
+  select?: boolean;
+}
