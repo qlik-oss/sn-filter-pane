@@ -1,4 +1,5 @@
 import { IListboxResource } from '../../hooks/types';
+import { store } from '../../store';
 import { IColumn, ISize } from './interfaces';
 
 export const COLLAPSED_HEIGHT = 58;
@@ -11,14 +12,18 @@ const COLUMN_SPACING = 16;
 const EXPANDED_HEADER_HEIGHT = 64;
 const EXPANDED_ROW_HEIGHT = 32;
 const SEARCH_BAR = 40;
+const sm = () => {
+  const { isSmallDevice } = store.getState();
+  return isSmallDevice?.();
+};
+
 /* eslint-disable no-param-reassign */
 
-// TODO: ResponsiveState.isSmallDevice return 1
-export const getMaxColumns = (size: ISize) => Math.floor((size.width + COLUMN_SPACING) / (COLUMN_MIN_WIDTH + COLUMN_SPACING)) || 1;
+const getMaxColumns = (size: ISize) => (sm() ? 1 : Math.floor((size.width + COLUMN_SPACING) / (COLUMN_MIN_WIDTH + COLUMN_SPACING)) || 1);
 
-export const getMaxItemsPerColumn = (size: ISize) => Math.max(1, Math.floor((size.height + ITEM_SPACING) / (COLLAPSED_HEIGHT + ITEM_SPACING)));
+const getMaxItemsPerColumn = (size: ISize) => Math.max(1, Math.floor((size.height + ITEM_SPACING) / (COLLAPSED_HEIGHT + ITEM_SPACING)));
 
-export const getColumnItemsCount = (columns: IColumn[]) => {
+const getColumnItemsCount = (columns: IColumn[]) => {
   let count = 0;
 
   columns.forEach((column) => {
@@ -28,30 +33,31 @@ export const getColumnItemsCount = (columns: IColumn[]) => {
   return count;
 };
 
-export const getHeightOf = (collapsedItemCount: number) => {
+const getHeightOf = (collapsedItemCount: number) => {
   // Subtract one ITEM_SPACING since the first item wont have a margin-top of ITEM_SPACING
   const height = (COLLAPSED_HEIGHT + ITEM_SPACING) * collapsedItemCount - ITEM_SPACING;
   return Math.max(height, 0);
 };
 
-export const getDimensionCardinal = (item: IListboxResource) => item.layout.qListObject.qDimensionInfo.qCardinal;
+const getDimensionCardinal = (item: IListboxResource) => item.layout.qListObject.qDimensionInfo.qCardinal;
 
-export const getHeightOfExpanded = (dimensionCardinal: number) => {
+const getHeightOfExpanded = (dimensionCardinal: number) => {
   const height = dimensionCardinal * EXPANDED_ROW_HEIGHT + EXPANDED_HEADER_HEIGHT + SEARCH_BAR + 3;
   return height;
 };
 
-export const doesAllFit = (itemsPerColumn: number, columnCount: number, itemCount: number) => itemCount <= itemsPerColumn * columnCount;
+const doesAllFit = (itemsPerColumn: number, columnCount: number, itemCount: number) => itemCount <= itemsPerColumn * columnCount;
 
-// TODO: Responive.isSmallDevice return false;
-export const haveRoomToExpandOne = (size: ISize, column: IColumn) => {
+const haveRoomToExpandOne = (size: ISize, column: IColumn) => {
+  if (sm()) {
+    return false;
+  }
   const spacing = (column.itemCount ?? 0) > 1 ? ITEM_SPACING : 0;
   return size.height > getHeightOf((column.itemCount ?? 0) - 1) + EXPANDED_HEIGHT + spacing;
 };
 
-export const calculateColumns = (size: ISize, columns: IColumn[], zoomEnabled: boolean) => {
-  // const canExpand = !ResponsiveState.isSmallDevice && size.height > EXPANDED_HEIGHT; // TODO:
-  const canExpand = size.height > EXPANDED_HEIGHT;
+export const calculateColumns = (size: ISize, columns: IColumn[]) => {
+  const canExpand = size.height > EXPANDED_HEIGHT && !sm();
   const maxColumns = getMaxColumns(size);
   const maxPerColumn = getMaxItemsPerColumn(size);
   const usedCount = getColumnItemsCount(columns);
@@ -62,7 +68,7 @@ export const calculateColumns = (size: ISize, columns: IColumn[], zoomEnabled: b
       itemCount: 1,
     });
     if (usedCount + 1 < size.dimensionCount) {
-      columns = calculateColumns(size, columns, zoomEnabled);
+      columns = calculateColumns(size, columns);
     }
   } else {
     let itemCount;
@@ -70,16 +76,9 @@ export const calculateColumns = (size: ISize, columns: IColumn[], zoomEnabled: b
     // Default case with zoom enabled, now overflow and (...) to zoom object
     itemCount = Math.min(size.dimensionCount - usedCount, maxPerColumn);
 
-    // TODO:
-    // if (ResponsiveState.isSmallDevice) {
-    // On small device all items is in a single column and overflow scrolled
-    // itemCount = size.dimensionCount - usedCount;
-    // } else if (!zoomEnabled) {
-    if (!zoomEnabled) {
-      // Don't show the fullscreen "..."-button, listboexes are collapsed and overflow is scrollable instead
-      const initialItemCount = Math.ceil((size.dimensionCount - usedCount) / (maxColumns - columns.length));
-      const maxItemCount = Math.max(maxPerColumn, initialItemCount);
-      itemCount = Math.min(size.dimensionCount - usedCount, maxItemCount);
+    if (sm()) {
+      // On small device all items is in a single column and overflow scrolled
+      itemCount = size.dimensionCount - usedCount;
     }
 
     columns.push({
@@ -98,7 +97,7 @@ export const calculateColumns = (size: ISize, columns: IColumn[], zoomEnabled: b
     }
 
     if (getColumnItemsCount(columns) < size.dimensionCount && columns.length < maxColumns) {
-      columns = calculateColumns(size, columns, zoomEnabled);
+      columns = calculateColumns(size, columns);
     }
   }
   return columns;
@@ -136,7 +135,7 @@ export const mergeColumnsAndResources = (columns: IColumn[], resources: IListbox
   return columns;
 };
 
-export const expandOne = (sortedItems: IListboxResource[] | undefined, h: number) => {
+const expandOne = (sortedItems: IListboxResource[] | undefined, h: number) => {
   if (!sortedItems) return false;
   let i;
   let item;
