@@ -33,7 +33,7 @@ git clone https://github.com/qlik-oss/nebula.js.git
 
 Build the `serve` sub-package (run build after every code change):
 ```
-cd ./ .js/commands/serve
+cd .js/commands/serve
 yarn
 yarn build:dev
 ```
