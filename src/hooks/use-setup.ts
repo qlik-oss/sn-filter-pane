@@ -3,9 +3,7 @@ import {
 } from '@nebula.js/stardust';
 import { store } from '../store';
 import { IEnv } from '../types/types';
-import {
-  IFilterPaneLayout, IUseOptions,
-} from './types';
+import { IFilterPaneLayout, IUseOptions } from './types';
 
 export default function useSetup({ sense }: IEnv) {
   const options = useOptions() as IUseOptions;

@@ -12,7 +12,7 @@ export default function useRender(/* {}: IEnv */) {
   const [resourcesArr, setResourcesArr] = useState<IListboxResource[] | undefined>(undefined);
 
   const {
-    app, fpLayout, options, constraints, translator,
+    app, fpLayout, options, constraints,
   } = store.getState();
 
   const containerElement = <IContainerElement>useElement();
