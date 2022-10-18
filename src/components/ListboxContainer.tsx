@@ -7,7 +7,7 @@ import { IConstraints } from '../types/types';
 
 interface ListboxContainerProps {
   layout: IListLayout;
-  app: EngineAPI.IApp;
+  app?: EngineAPI.IApp;
   listboxOptions: IListBoxOptions;
   constraints?: IConstraints;
 }
@@ -19,6 +19,9 @@ const ListboxContainer = ({
   const elRef = useRef<HTMLElement>();
 
   useEffect(() => {
+    if (!app) {
+      return;
+    }
     const fieldName = getFieldName(layout);
     const nebbie = embed(app, {
       //   context: {

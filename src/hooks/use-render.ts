@@ -6,9 +6,9 @@ import {
 } from './types';
 import { render, teardown } from '../components/root';
 import './style.scss';
-import { IEnv } from '../types/types';
+// import { IEnv } from '../types/types';
 
-export default function useRender({ sense }: IEnv) {
+export default function useRender(/* {}: IEnv */) {
   const [resourcesArr, setResourcesArr] = useState<IListboxResource[] | undefined>(undefined);
 
   const {
@@ -33,13 +33,10 @@ export default function useRender({ sense }: IEnv) {
     const root = render(
       containerElement,
       {
-        app,
         listboxOptions: options.listboxOptions ?? {},
         resources: resourcesArr,
         onFullscreen: options.zoomSelf,
         isZoomed: options.isZoomed,
-        constraints,
-        t: translator,
       },
     );
     return (() => {

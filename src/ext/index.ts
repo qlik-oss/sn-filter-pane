@@ -1,6 +1,7 @@
 import pp from './property-panel';
+import { IEnv } from '../types/types';
 
-export default function ext(env: object) {
+export default function ext(env: IEnv) {
   return {
     usePropertyHandler: 'filterpane-data',
     definition: <object>pp(env),
