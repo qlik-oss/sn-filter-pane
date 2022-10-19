@@ -1,7 +1,5 @@
 interface ISense {
   isSmallDevice: () => boolean,
-  isZoomed: () => boolean,
-  zoomSelf: () => void,
 }
 
 export interface IEnv {

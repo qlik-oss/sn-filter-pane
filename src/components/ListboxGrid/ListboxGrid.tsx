@@ -1,7 +1,7 @@
 import React, {
   useCallback, useEffect, useRef, useState,
 } from 'react';
-import { Grid, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // @ts-ignore
 import { ResizableBox } from 'react-resizable';
@@ -42,13 +42,12 @@ export default function ListboxGrid(props: ListboxGridProps) {
   const {
     app,
     constraints,
-    translator: t,
     sense,
   } = store.getState();
 
   const gridRef = useRef<HTMLDivElement>();
   const [columns, setColumns] = useState<IColumn[]>([]);
-  const isInSense = typeof (sense?.zoomSelf) === 'function';
+  const isInSense = typeof (sense?.isSmallDevice) === 'function';
 
   const handleResize = useCallback(() => {
     const { width, height } = getWidthHeight(gridRef);
@@ -66,6 +65,10 @@ export default function ListboxGrid(props: ListboxGridProps) {
       handleResize();
     }
   }, []);
+
+  const onExpand = () => {
+    throw new Error('Not implemented');
+  };
 
   const dHandleResize = debounce(handleResize, isInSense ? 0 : 50);
 
@@ -91,13 +94,9 @@ export default function ListboxGrid(props: ListboxGridProps) {
                   </ColumnItem>
                 ))}
 
-                {column.showAll && !sense?.isZoomed?.()
+                {column.showAll
                   && <ColumnItem height='100%'>
-                    <ExpandButton onClick={sense?.zoomSelf} disabled={constraints?.active}></ExpandButton>
-                  </ColumnItem>}
-                {column.showAll && sense?.isZoomed?.()
-                  && <ColumnItem height='100%'>
-                    <Typography>{t?.get('Tooltip.Filterpane.NotAllItemsShow')}</Typography>
+                    <ExpandButton onClick={onExpand} disabled={constraints?.active}></ExpandButton>
                   </ColumnItem>}
               </Column>
 
