@@ -26,8 +26,6 @@ import { store } from '../../store';
 export interface ListboxGridProps {
   listboxOptions: IListBoxOptions;
   resources: IListboxResource[];
-  onFullscreen?: () => void;
-  isZoomed?: boolean;
 }
 
 // TODO: Remove
@@ -39,15 +37,18 @@ export default function ListboxGrid(props: ListboxGridProps) {
   const {
     resources,
     listboxOptions,
-    onFullscreen,
-    isZoomed,
   } = props;
 
-  const { app, constraints, translator: t } = store.getState();
+  const {
+    app,
+    constraints,
+    translator: t,
+    sense,
+  } = store.getState();
 
   const gridRef = useRef<HTMLDivElement>();
   const [columns, setColumns] = useState<IColumn[]>([]);
-  const isInSense = typeof (onFullscreen) === 'function';
+  const isInSense = typeof (sense?.zoomSelf) === 'function';
 
   const handleResize = useCallback(() => {
     const { width, height } = getWidthHeight(gridRef);
@@ -90,11 +91,11 @@ export default function ListboxGrid(props: ListboxGridProps) {
                   </ColumnItem>
                 ))}
 
-                {column.showAll && !isZoomed
+                {column.showAll && !sense?.isZoomed?.()
                   && <ColumnItem height='100%'>
-                    <ExpandButton onClick={onFullscreen} disabled={constraints?.active}></ExpandButton>
+                    <ExpandButton onClick={sense?.zoomSelf} disabled={constraints?.active}></ExpandButton>
                   </ColumnItem>}
-                {column.showAll && isZoomed
+                {column.showAll && sense?.isZoomed?.()
                   && <ColumnItem height='100%'>
                     <Typography>{t?.get('Tooltip.Filterpane.NotAllItemsShow')}</Typography>
                   </ColumnItem>}

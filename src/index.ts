@@ -15,7 +15,7 @@ export default function supernova(env: IEnv) {
     },
     component() {
       useSetup({ ...env });
-      useRender({ ...env });
+      useRender();
     },
   };
 }
