@@ -1,8 +1,9 @@
-import { frequencies } from "../constants";
-import textAlignItems from "./text-align-items";
+import { IEnv } from '../../../types/types';
+import { frequencies } from '../constants';
+import textAlignItems from './text-align-items';
 
-export default function data(env) {
-  const { isEnabled } = env;
+export default function data(env: IEnv) {
+  const { isEnabled } = env?.flags || {};
 
   const data = {
     classification: {

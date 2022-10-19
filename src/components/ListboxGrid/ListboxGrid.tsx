@@ -21,15 +21,12 @@ import { ColumnGrid } from './grid-components/ColumnGrid';
 import { Column } from './grid-components/Column';
 import { ColumnItem } from './grid-components/ColumnItem';
 import ConditionalWrapper from './ConditionalWrapper';
-import { IConstraints } from '../../types/types';
+import { store } from '../../store';
 
 export interface ListboxGridProps {
-  app: EngineAPI.IApp;
   listboxOptions: IListBoxOptions;
   resources: IListboxResource[];
   onFullscreen?: () => void;
-  constraints?: IConstraints;
-  t?: { get: (translationString: string) => string };
   isZoomed?: boolean;
 }
 
@@ -41,13 +38,13 @@ const Resizable = styled(ResizableBox)(() => ({
 export default function ListboxGrid(props: ListboxGridProps) {
   const {
     resources,
-    app,
     listboxOptions,
     onFullscreen,
     isZoomed,
-    constraints,
-    t,
   } = props;
+
+  const { app, constraints, translator: t } = store.getState();
+
   const gridRef = useRef<HTMLDivElement>();
   const [columns, setColumns] = useState<IColumn[]>([]);
   const isInSense = typeof (onFullscreen) === 'function';
@@ -105,7 +102,6 @@ export default function ListboxGrid(props: ListboxGridProps) {
 
             </ColumnGrid>
           ))}
-
         </Grid>
       </ConditionalWrapper>
     </>

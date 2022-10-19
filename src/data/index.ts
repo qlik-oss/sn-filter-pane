@@ -1,5 +1,5 @@
 import extend from 'extend';
-import { store, IStore } from '../store';
+import { store } from '../store';
 import { defaultListboxProps } from './listbox-properties';
 
 export default function getData(env) {
@@ -29,7 +29,7 @@ export default function getData(env) {
         dimensions: {
           min: 0,
           max: 1000,
-          add(dimension: EngineAPI.INxDimension, data, handler) {
+          add(dimension: EngineAPI.INxDimension, data: EngineAPI.IGenericObjectProperties /* , handler */) {
             const { model: filterPaneModel } = store.getState();
 
             const listboxProps = extend(true, {}, defaultListboxProps, {
@@ -43,20 +43,22 @@ export default function getData(env) {
 
             filterPaneModel?.createChild(listboxProps, data);
           },
-          move(dimension, data) {
+          move(/* dimension, data */) {
             // setMoveSort(data);
             // setColorVars(data);
             // customTooltipUtils.moveCallbackCustomTooltip(data, dimension);
           },
           remove(dimension, data, index) {
-            const { layout, model: filterPaneModel } = store.getState();
-            const layoutDim = layout.qChildList?.qItems[index];
+            const { fpLayout, model: filterPaneModel } = store.getState();
+
+            const { qItems = [] } = fpLayout?.qChildList || {};
+            const layoutDim = qItems[index];
             if (layoutDim) {
-              const { qId } = layout.qChildList.qItems[index].qInfo;
-              filterPaneModel.destroyChild(qId, data);
+              const { qId } = qItems[index].qInfo;
+              filterPaneModel?.destroyChild(qId, data);
             }
           },
-          replace(dimension, oldDimension, index, data) {
+          replace(/* dimension, oldDimension, index, data */) {
             console.log('replace dimension');
           },
           description(_: unknown, __: unknown, config: Config): string {
