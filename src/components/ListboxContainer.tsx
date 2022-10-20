@@ -10,10 +10,11 @@ interface ListboxContainerProps {
   app?: EngineAPI.IApp;
   listboxOptions: IListBoxOptions;
   constraints?: IConstraints;
+  borderBottom?: boolean;
 }
 
 const ListboxContainer = ({
-  layout, app, constraints, listboxOptions,
+  layout, app, constraints, listboxOptions, borderBottom,
 }: ListboxContainerProps) => {
   const [listboxInstance, setListboxInstance] = useState<stardust.FieldInstance>();
   const elRef = useRef<HTMLElement>();
@@ -59,6 +60,7 @@ const ListboxContainer = ({
       <Box
         height='100%'
         border='1px solid lightgrey'
+        borderBottom={borderBottom ? '1px solid lightgrey' : 0}
         ref={elRef}
       />
     </>

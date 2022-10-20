@@ -53,6 +53,7 @@ export interface IListboxResource {
   expand: boolean;
   cardinal: number;
   responsiveMode: string;
+  fullyExpanded: boolean;
 }
 
 export type ListboxResourcesArr = array & IListboxResource[];
