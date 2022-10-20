@@ -17,7 +17,7 @@ export default function useSetup({ sense }: IEnv) {
     app,
     model,
     fpLayout,
-    isSmallDevice: sense?.isSmallDevice,
+    sense,
     options,
     constraints,
     translator,

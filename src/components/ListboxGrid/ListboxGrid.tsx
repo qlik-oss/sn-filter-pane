@@ -1,7 +1,7 @@
 import React, {
   useCallback, useEffect, useRef, useState,
 } from 'react';
-import { Grid, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // @ts-ignore
 import { ResizableBox } from 'react-resizable';
@@ -26,8 +26,6 @@ import { store } from '../../store';
 export interface ListboxGridProps {
   listboxOptions: IListBoxOptions;
   resources: IListboxResource[];
-  onFullscreen?: () => void;
-  isZoomed?: boolean;
 }
 
 // TODO: Remove
@@ -39,15 +37,17 @@ export default function ListboxGrid(props: ListboxGridProps) {
   const {
     resources,
     listboxOptions,
-    onFullscreen,
-    isZoomed,
   } = props;
 
-  const { app, constraints, translator: t } = store.getState();
+  const {
+    app,
+    constraints,
+    sense,
+  } = store.getState();
 
   const gridRef = useRef<HTMLDivElement>();
   const [columns, setColumns] = useState<IColumn[]>([]);
-  const isInSense = typeof (onFullscreen) === 'function';
+  const isInSense = typeof (sense?.isSmallDevice) === 'function';
 
   const handleResize = useCallback(() => {
     const { width, height } = getWidthHeight(gridRef);
@@ -65,6 +65,10 @@ export default function ListboxGrid(props: ListboxGridProps) {
       handleResize();
     }
   }, []);
+
+  const onExpand = () => {
+    throw new Error('Not implemented');
+  };
 
   const dHandleResize = debounce(handleResize, isInSense ? 0 : 50);
 
@@ -90,13 +94,9 @@ export default function ListboxGrid(props: ListboxGridProps) {
                   </ColumnItem>
                 ))}
 
-                {column.showAll && !isZoomed
+                {column.showAll
                   && <ColumnItem height='100%'>
-                    <ExpandButton onClick={onFullscreen} disabled={constraints?.active}></ExpandButton>
-                  </ColumnItem>}
-                {column.showAll && isZoomed
-                  && <ColumnItem height='100%'>
-                    <Typography>{t?.get('Tooltip.Filterpane.NotAllItemsShow')}</Typography>
+                    <ExpandButton onClick={onExpand} disabled={constraints?.active}></ExpandButton>
                   </ColumnItem>}
               </Column>
 

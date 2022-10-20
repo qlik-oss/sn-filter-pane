@@ -1,10 +1,12 @@
+interface ISense {
+  isSmallDevice: () => boolean,
+}
+
 export interface IEnv {
   flags: {
     isEnabled: (flag?: string) => boolean;
   },
-  sense?: {
-    isSmallDevice: () => boolean,
-  }
+  sense?: ISense,
 }
 
 export interface IConstraints {

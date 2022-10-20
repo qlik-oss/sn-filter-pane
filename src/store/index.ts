@@ -1,6 +1,7 @@
 import { stardust } from '@nebula.js/stardust';
 import createVanilla from 'zustand/vanilla';
 import { IFilterPaneLayout, IUseOptions } from '../hooks/types';
+import { ISense } from '../types/types';
 
 export interface IStore {
   app?: EngineAPI.IApp | undefined;
@@ -21,4 +22,5 @@ export const store = createVanilla(() => ({
   options: <IUseOptions>{},
   constraints: <stardust.Constraints | undefined>undefined,
   translator: <stardust.Translator | undefined>undefined,
+  sense: <ISense | undefined>undefined,
 }));
