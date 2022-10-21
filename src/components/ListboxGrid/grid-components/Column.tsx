@@ -9,7 +9,7 @@ export interface ColumnProps {
 export const Column = ({ children, lastColumn }: ColumnProps) => (
   <Box
     height='100%'
-    paddingRight={lastColumn ? undefined : '8px'}
+    paddingRight={lastColumn ? '0px' : '8px'}
   >
     {children}
   </Box>
