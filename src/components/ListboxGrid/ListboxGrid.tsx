@@ -12,7 +12,7 @@ import ListboxContainer from '../ListboxContainer';
 import 'react-resizable/css/styles.css';
 import ElementResizeListener from '../ElementResizeListener';
 import {
-  setDefaultValues, balanceColumns, calculateColumns, calculateExpandPriority, COLLAPSED_HEIGHT, mergeColumnsAndResources,
+  setDefaultValues, balanceColumns, calculateColumns, calculateExpandPriority, mergeColumnsAndResources,
 } from './distribute-resources';
 import { FoldedListbox } from '../FoldedListbox';
 import { ExpandButton } from '../ExpandButton';
@@ -79,16 +79,26 @@ export default function ListboxGrid(props: ListboxGridProps) {
         wrapper={(children: JSX.Element[]) => <Resizable width={1080} height={1000} minConstraints={[10, 10]} maxConstraints={[1220, 1820]}>{children}</Resizable>}
       >
         <ElementResizeListener onResize={dHandleResize} />
-        <Grid container columns={columns?.length} ref={gridRef as any} spacing={1} height='100%'>
+        <Grid container columns={columns?.length} ref={gridRef as any} spacing={0} height='100%'>
 
           {!!columns?.length && columns?.map((column: IColumn, i: number) => (
             <ColumnGrid key={i} widthPercent={100 / columns.length}>
-              <Column>
+              <Column lastColumn={columns.length === i + 1}>
 
-                {!!column?.items?.length && column.items.map((item: IListboxResource) => (
-                  <ColumnItem key={item.id} height={item.expand ? item.height : COLLAPSED_HEIGHT}>
+                {!!column?.items?.length && column.items.map((item: IListboxResource, j: number) => (
+                  <ColumnItem
+                    key={item.id}
+                    lastItem={column.items?.length === j + 1}
+                    listItem={item}
+                  >
                     {item.expand
-                      ? <ListboxContainer layout={item.layout} app={app} listboxOptions={listboxOptions} constraints={constraints}></ListboxContainer>
+                      ? <ListboxContainer
+                        layout={item.layout}
+                        app={app}
+                        listboxOptions={listboxOptions}
+                        constraints={constraints}
+                        borderBottom={(column.items?.length === j + 1) || !item.fullyExpanded}
+                      ></ListboxContainer>
                       : <FoldedListbox layout={item.layout}></FoldedListbox>
                     }
                   </ColumnItem>

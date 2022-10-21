@@ -2,16 +2,16 @@ import { IListboxResource } from '../../hooks/types';
 import { store } from '../../store';
 import { IColumn, ISize } from './interfaces';
 
-export const COLLAPSED_HEIGHT = 58;
+export const COLLAPSED_HEIGHT = 34;
 export const BUTTON_HEIGHT = 50;
 const BUTTON_SPACING = 8;
-const ITEM_SPACING = 0;
+export const ITEM_SPACING = 8;
 const EXPANDED_HEIGHT = 140;
 const COLUMN_MIN_WIDTH = 160;
 const COLUMN_SPACING = 16;
-const EXPANDED_HEADER_HEIGHT = 64;
-const EXPANDED_ROW_HEIGHT = 32;
-const SEARCH_BAR = 40;
+const EXPANDED_HEADER_HEIGHT = 50;
+const EXPANDED_ROW_HEIGHT = 33;
+const SEARCH_BAR = 42;
 const sm = () => {
   const { isSmallDevice } = store.getState();
   return isSmallDevice?.();
@@ -41,10 +41,7 @@ const getHeightOf = (collapsedItemCount: number) => {
 
 const getDimensionCardinal = (item: IListboxResource) => item.layout.qListObject.qDimensionInfo.qCardinal;
 
-const getHeightOfExpanded = (dimensionCardinal: number) => {
-  const height = dimensionCardinal * EXPANDED_ROW_HEIGHT + EXPANDED_HEADER_HEIGHT + SEARCH_BAR + 3;
-  return height;
-};
+const getHeightOfExpanded = (dimensionCardinal: number) => dimensionCardinal * EXPANDED_ROW_HEIGHT + EXPANDED_HEADER_HEIGHT + SEARCH_BAR + 4;
 
 const doesAllFit = (itemsPerColumn: number, columnCount: number, itemCount: number) => itemCount <= itemsPerColumn * columnCount;
 
@@ -135,6 +132,13 @@ export const mergeColumnsAndResources = (columns: IColumn[], resources: IListbox
   return columns;
 };
 
+const setFullyExpanded = (item: IListboxResource) => {
+  if (parseFloat(item.height) >= getHeightOfExpanded(item.cardinal)) {
+    item.height = `${getHeightOfExpanded(item.cardinal)}px`;
+    item.fullyExpanded = true;
+  }
+};
+
 const expandOne = (sortedItems: IListboxResource[] | undefined, h: number) => {
   if (!sortedItems) return false;
   let i;
@@ -148,6 +152,7 @@ const expandOne = (sortedItems: IListboxResource[] | undefined, h: number) => {
       if (expandedHeight < h) {
         item.expand = true;
         item.height = `${expandedHeight}px`;
+        setFullyExpanded(item);
         return expandedHeight + ITEM_SPACING;
       }
     }
@@ -193,16 +198,16 @@ export const calculateExpandPriority = (columns: IColumn[], size: ISize) => {
       const collapsedItems = sortedItems?.filter((item) => !item.expand);
 
       if (leftOverHeight > EXPANDED_HEIGHT && collapsedItems?.length) {
-        const item = collapsedItems[0]; // Only add spacing if there are more items after this.
-        const spacing = collapsedItems.length > 1 ? ITEM_SPACING : 0;
+        const item = collapsedItems[0];
 
         if (!item.expand) {
           if ((sortedItems?.length ?? 0) > 1) {
             // Should only set specific height when multiple items in columns, otherwise 100% height from default value
-            item.height = `${size.height - getHeightOf(collapsedItems.length - 1) - totalExpandedHeight - spacing}px`;
+            item.height = `${size.height - getHeightOf(collapsedItems.length - 1) - totalExpandedHeight}px`;
           }
           item.expand = true;
         }
+        setFullyExpanded(item);
       }
     }
 
@@ -218,6 +223,7 @@ export const calculateExpandPriority = (columns: IColumn[], size: ISize) => {
 
 export const setDefaultValues = (resources: IListboxResource[]) => resources.map((resource: IListboxResource) => {
   resource.expand = false;
-  resource.height = '100%';
+  resource.height = 'calc(100% - 2px)';
+  resource.fullyExpanded = false;
   return resource;
 });
