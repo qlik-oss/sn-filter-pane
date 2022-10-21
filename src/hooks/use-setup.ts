@@ -23,7 +23,7 @@ export default function useSetup({ sense }: IEnv) {
     options,
     constraints,
     translator,
-    selectionsApi,
+    selectionsApi: sense ? selectionsApi : undefined,
     embed,
   });
 }
