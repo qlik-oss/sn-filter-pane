@@ -61,6 +61,7 @@ const ListboxContainer = ({
         height='100%'
         border='1px solid lightgrey'
         borderBottom={borderBottom ? '1px solid lightgrey' : 0}
+        borderRadius='4px'
         ref={elRef}
       />
     </>

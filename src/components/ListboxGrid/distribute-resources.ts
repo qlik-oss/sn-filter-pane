@@ -223,7 +223,7 @@ export const calculateExpandPriority = (columns: IColumn[], size: ISize) => {
 
 export const setDefaultValues = (resources: IListboxResource[]) => resources.map((resource: IListboxResource) => {
   resource.expand = false;
-  resource.height = '100%';
+  resource.height = 'calc(100% - 2px)';
   resource.fullyExpanded = false;
   return resource;
 });
