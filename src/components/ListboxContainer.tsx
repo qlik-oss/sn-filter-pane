@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Box } from '@mui/material';
-import { embed, stardust } from '@nebula.js/stardust';
-import { getFieldName } from '../hooks/listbox/funcs';
+import { stardust } from '@nebula.js/stardust';
 import { IListBoxOptions, IListLayout } from '../hooks/types';
 import { IConstraints } from '../types/types';
+import { store } from '../store';
 
 interface ListboxContainerProps {
   layout: IListLayout;
@@ -19,37 +19,32 @@ const ListboxContainer = ({
   const [listboxInstance, setListboxInstance] = useState<stardust.FieldInstance>();
   const elRef = useRef<HTMLElement>();
 
+  const { embed, model, selectionsApi } = store.getState();
+
   useEffect(() => {
-    if (!app) {
+    if (!layout || !embed) {
       return;
     }
-    const fieldName = getFieldName(layout);
-    const nebbie = embed(app, {
-      //   context: {
-      //     language: translator.language,
-      //   },
+    embed.field(layout.qInfo).then((inst) => {
+      setListboxInstance(inst);
     });
-    nebbie.field(fieldName).then((inst: stardust.FieldInstance) => setListboxInstance(inst));
   }, []);
 
   useEffect(() => {
-    if (!elRef.current || !listboxInstance) {
+    if (!elRef.current || !listboxInstance || !model) {
       return undefined;
     }
 
     const allowSelect = !constraints?.select && !constraints?.active;
 
-    listboxInstance.mount(
-      elRef.current,
-      {
-        __DO_NOT_USE__: {
-          selectDisabled: () => !allowSelect,
-        },
-        ...listboxOptions,
-        dense: false,
+    listboxInstance.mount(elRef.current, {
+      __DO_NOT_USE__: {
+        selectionsApi,
+        selectDisabled: () => !allowSelect,
       },
-    );
-
+      ...listboxOptions,
+      dense: false,
+    });
     return () => {
       listboxInstance.unmount();
     };
