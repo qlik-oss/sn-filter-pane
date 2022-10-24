@@ -24,7 +24,7 @@ export default function data(env: IEnv) {
         type: 'string',
         component: 'library-item',
         libraryItemType: 'dimension',
-        ref: 'qLibraryId',
+        ref: 'qListObjectDef.qLibraryId',
         translation: 'Common.Dimension',
         show(itemData) {
           return itemData.qListObjectDef.qLibraryId;
@@ -34,7 +34,7 @@ export default function data(env: IEnv) {
         type: 'string',
         component: 'expression',
         expressionType: 'dimension',
-        ref: 'qDef.qFieldDefs.0',
+        ref: 'qListObjectDef.qDef.qFieldDefs.0',
         translation: 'Common.Field',
         show(itemData) {
           return !itemData.qListObjectDef.qLibraryId;

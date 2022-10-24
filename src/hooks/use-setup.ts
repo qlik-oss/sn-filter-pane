@@ -1,5 +1,5 @@
 import {
-  useApp, useLayout, useModel, useOptions, useConstraints, useTranslator,
+  useEmbed, useApp, useLayout, useModel, useOptions, useConstraints, useTranslator, useSelections,
 } from '@nebula.js/stardust';
 import { store } from '../store';
 import { IEnv } from '../types/types';
@@ -12,6 +12,8 @@ export default function useSetup({ sense }: IEnv) {
   const app = useApp() as EngineAPI.IApp;
   const model = useModel();
   const fpLayout = useLayout() as IFilterPaneLayout;
+  const selectionsApi = useSelections();
+  const embed = useEmbed();
 
   store.setState({
     app,
@@ -21,5 +23,7 @@ export default function useSetup({ sense }: IEnv) {
     options,
     constraints,
     translator,
+    selectionsApi: sense ? selectionsApi : undefined,
+    embed,
   });
 }
