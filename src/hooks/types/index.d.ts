@@ -5,6 +5,9 @@ export interface IContainerElement extends HTMLDivElement {
 export interface IListLayout extends EngineAPI.IGenericListLayout {
   title: string;
   qStateName: string;
+  qInfo: {
+    qId: string;
+  }
 }
 
 interface ISessionModel {
