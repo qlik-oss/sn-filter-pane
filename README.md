@@ -1,3 +1,12 @@
+
+# Deprecated
+
+This repo has been archived and replaced by: https://github.com/qlik-oss/sn-list-objects which contains:
+- The Filter pane
+- A standalone List box visualization.
+
+---
+
 # sn-filter-pane
 
 A new Filter pane based on Nebula Listbox.  
